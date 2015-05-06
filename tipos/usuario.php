@@ -108,6 +108,15 @@ class usuario{
     
     public static function sacarHuecosOrden($list){
         $ultimoOrden = 1;
+        usort($list, array('usuario', 'compararOrden'));//me aseguro que esté ordenado
+        while($ultimoOrden <= count($list)){
+            $list[$ultimoOrden-1]->orden = $ultimoOrden;
+            $ultimoOrden++;
+        }
+    }
+    
+    public static function compararOrden($a, $b){
+        return ( ($a->orden == $b->orden) ? 0 : (($a->orden < $b->orden) ? -1 : 1) );
     }
 
 }
