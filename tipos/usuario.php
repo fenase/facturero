@@ -86,16 +86,24 @@ class usuario{
      * Actualiza el usuario actual en la db
      */
     public function guardar(){
-        $query = "UPDATE usuarios "
-                . "SET user = " . $this->user
-                . ", pass = " . $this->pass
-                . ", ultimoLogin = " . $this->ultimoLogin
-                . ", loginenabled = " . $this->loginEnabled
-                . ", verificacion = " . $this->verificacion
-                . ", mail = " . $this->mail
-                . ", nombre = " . $this->nombre
-                . "WHERE idusuario = " . $this->id;
-        $this->db->query($query);
+        if($this->existe()){
+            $query = "UPDATE usuarios "
+                    . "SET user = " . $this->user
+                    . ", pass = " . $this->pass
+                    . ", ultimoLogin = " . $this->ultimoLogin
+                    . ", loginenabled = " . $this->loginEnabled
+                    . ", verificacion = " . $this->verificacion
+                    . ", mail = " . $this->mail
+                    . ", nombre = " . $this->nombre
+                    . "WHERE idusuario = " . $this->id;
+            $this->db->query($query);
+        }else{
+            $query = "INSERT INTO usuarios (user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre) VALUE ("
+                    . $this->user . ", " . $this->pass . ", " . $this->ultimoLogin . ", " . $this->loginEnabled . ", "
+                    . $this->verificacion . ", " . $this->mail . ", " . $this->nombre . ")";
+            $this->db->query($query);
+            $this->id = $this->db->insert_id;
+        }
     }
 
     public function crear(){
@@ -106,7 +114,7 @@ class usuario{
         $this->db->query($query);
     }
     
-    public static function sacarHuecosOrden($list){
+    public static function sacarHuecosOrden(&$list){
         $ultimoOrden = 1;
         usort($list, array('usuario', 'compararOrden'));//me aseguro que esté ordenado
         while($ultimoOrden <= count($list)){

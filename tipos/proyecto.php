@@ -104,10 +104,10 @@ class proyecto{
      * @return array(usuario)
      */
     private function participantesDelProyecto(){
-        $query = "SELECT usuarios.idUsuarios, orden, user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre "
-                . "FROM usuariosenproyecto "
-                . "JOIN usuarios ON usuariosenproyecto.idUsuarios = usuarios.idUsuarios "
-                . "WHERE usuariosenproyecto.idproyectos = " . $this->id;
+        $query = "SELECT u.idUsuarios, up.orden, u.user, u.pass, u.ultimoLogin, u.loginenabled, u.verificacion, u.mail, u.nombre "
+                . "FROM usuariosenproyecto up "
+                . "JOIN usuarios u ON up.idUsuarios = u.idUsuarios "
+                . "WHERE up.idproyectos = " . $this->id;
         $res   = $this->db->query($query);
         $datos = array();
         while(($row   = $res->fetch_assoc())){
@@ -156,7 +156,10 @@ class proyecto{
     }
     
     private function guardarParticipantes(){
-        
+        $query = "DELETE FROM usuariosenproyecto WHERE idproyectos = " . $this->id; //borro todos los usuarios
+        $this->db->query($query);
+        $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . listaQueryValuesUsuariosEnProyecto();
+        $this->db->query($query);//vuelvo a insertar la lista.
     }
     
     /**
@@ -182,6 +185,19 @@ class proyecto{
             $proyectos[] = new proyecto($row['idproyectos']);
         }
         return $proyectos;
+    }
+    
+    private function listaQueryValuesUsuariosEnProyecto(){
+        $i = 0;
+        $res = '';
+        do{
+            $res .= '(';
+            $res .= $this->participantes[$i]->id . ', ';
+            $res .= $this->id . ', ';
+            $res .= $this->participantes[$i]->orden;
+            $res .= ')';
+            $i++;
+        }while($i < count($this->cantidadParticipantes) && $res .= ', ');
     }
 
 }
