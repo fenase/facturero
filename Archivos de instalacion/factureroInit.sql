@@ -57,7 +57,8 @@ CREATE TABLE `proyectos` (
   `idproyectos` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(128) COLLATE utf8_spanish_ci NOT NULL,
   `frecuencia` varchar(45) COLLATE utf8_spanish_ci DEFAULT 'VI' COMMENT 'separado por ''|'': LU|MA|MI|JU|VI|SA|DO\nsi es número: cada cuantos días',
-  `cantidadParticipantes` smallint(5) unsigned NOT NULL DEFAULT '1',
+  `cantidadParticipantes` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `siguienteIndex` smallint(5) unsigned NOT NULL DEFAULT '1',
   `comentarios` varchar(1000) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Comentarios del proyecto',
   `leyenda` text COLLATE utf8_spanish_ci COMMENT 'Agregar texto en los mensajes',
   PRIMARY KEY (`idproyectos`),
@@ -72,7 +73,7 @@ CREATE TABLE `proyectos` (
 
 LOCK TABLES `proyectos` WRITE;
 /*!40000 ALTER TABLE `proyectos` DISABLE KEYS */;
-INSERT INTO `proyectos` VALUES (1,'Prueba basica','1',0,'comentate','soy leyenda');
+INSERT INTO `proyectos` VALUES (1,'Prueba basica','1',0,1,'comentate','soy leyenda');
 /*!40000 ALTER TABLE `proyectos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,4 +156,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-06 12:57:06
+-- Dump completed on 2015-05-07 11:25:12
