@@ -12,6 +12,7 @@ class proyecto{
     private $frecuencia;
     private $cantidadParticipantes;
     private $participantes;
+    private $siguienteParticipanteIndex;
     private $comentarios;
     private $leyenda;
     private static $db;
@@ -69,6 +70,10 @@ class proyecto{
         return $this->participantes;
     }
 
+    public function getSiguienteParticipanteIndex(){
+        return $this->siguienteParticipanteIndex;
+    }
+
     public function getComentarios(){
         return $this->comentarios;
     }
@@ -87,6 +92,10 @@ class proyecto{
 
     public function setParticipantes($participantes){
         $this->participantes = $participantes;
+    }
+
+    public function setSiguienteParticipanteIndex($i){
+        $this->siguienteParticipanteIndex = $i;
     }
 
     public function setComentarios($comentarios){
@@ -160,6 +169,18 @@ class proyecto{
         $this->db->query($query);
         $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . listaQueryValuesUsuariosEnProyecto();
         $this->db->query($query);//vuelvo a insertar la lista.
+    }
+    
+    /**
+     * Inserta un usuario en la lista de usuarios
+     * @param int $id identificación del usuario
+     * @param int $donde Posición a insertar. Si vacío: justo antes del actual.
+     */
+    public function IngresarParticipante($id, $donde = NULL){
+        $donde = (is_null($donde)) ? ($this->siguienteParticipanteIndex - 1) : $donde;//decido si
+        $donde %= $this->cantidadParticipantes;
+        array_splice($this->participantes, $this->siguienteParticipanteIndex, 0, new usuario($id));
+        $this->cantidadParticipantes = count($this->participantes);//ver si es posible hacer +1, -1 (sin contar) de acuerdo a casos posibles
     }
     
     /**
