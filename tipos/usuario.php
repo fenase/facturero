@@ -98,7 +98,7 @@ class usuario{
                     . "WHERE idusuario = " . $this->id;
             $this->db->query($query);
         }else{
-            $query = "INSERT INTO usuarios (user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre) VALUE ("
+            $query    = "INSERT INTO usuarios (user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre) VALUE ("
                     . $this->user . ", " . $this->pass . ", " . $this->ultimoLogin . ", " . $this->loginEnabled . ", "
                     . $this->verificacion . ", " . $this->mail . ", " . $this->nombre . ")";
             $this->db->query($query);
@@ -108,38 +108,39 @@ class usuario{
 
     public function crear(){
         $query = "INSERT INTO usuarios (user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre) "
-                . "VALUE (" . $this->user . ',' . $this->pass . ',' . $this->ultimoLogin . ',' 
-                . $this->loginEnabled . ',' . $this->verificacion . ',' . $this->mail . ',' 
+                . "VALUE (" . $this->user . ',' . $this->pass . ',' . $this->ultimoLogin . ','
+                . $this->loginEnabled . ',' . $this->verificacion . ',' . $this->mail . ','
                 . $this->nombre . ',' . $this->id . ')';
         $this->db->query($query);
     }
-    
+
     public static function sacarHuecosOrden(&$list){
         $ultimoOrden = 1;
-        usort($list, array('usuario', 'compararOrden'));//me aseguro que esté ordenado
+        usort($list, array('usuario', 'compararOrden')); //me aseguro que esté ordenado
         while($ultimoOrden <= count($list)){
-            $list[$ultimoOrden-1]->setOrden($ultimoOrden);
+            $list[$ultimoOrden - 1]->setOrden($ultimoOrden);
             $ultimoOrden++;
         }
     }
-    
+
     public static function compararOrden($a, $b){
-        return ( ($a->getOrden() == $b->getOrden()) ? 0 : (($a->getOrden() < $b->getOrden()) ? -1 : 1) );
+        return ( ($a->getOrden() == $b->getOrden()) ? 0 : 
+                                        (($a->getOrden() < $b->getOrden()) ? -1 : 1) );
     }
-    
+
     /**
      * Obtiene los proyectos asignados a un usuario
      * @return array(int, string) arreglo de <id, nombre> de proyecto
      */
     public function proyectos(){
-        $ret = array();
+        $ret   = array();
         $query = "SELECT up.idproyectos, p.nombre "
                 . "FROM usuariosenproyecto up "
                 . "JOIN proyectos p ON p.idproyectos = up.idproyectos "
                 . "WHERE up.idusuarios = " . $this->id . " "
                 . "ORDER BY p.nombre ASC";
-        $res = $this->db->query($query);
-        while($row = $res->fetch_assoc()){
+        $res   = $this->db->query($query);
+        while($row   = $res->fetch_assoc()){
             $ret[] = array('id' => $row['idproyectos'], 'nombre' => $row['nombre']);
         }
         return $ret;

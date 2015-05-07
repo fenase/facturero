@@ -53,7 +53,7 @@ class proyecto{
     public function getId(){
         return $this->id;
     }
-    
+
     public function getNombre(){
         return $this->nombre;
     }
@@ -133,7 +133,7 @@ class proyecto{
         }
         return usuario::crearUsuarios($datos);
     }
-    
+
     /**
      * Guarda el proyecto en la base de datos
      */
@@ -142,10 +142,10 @@ class proyecto{
             $query = "INSERT INTO proyectos "
                     . "(nombre, frecuencia, cantidadParticipantes, comentarios, leyenda) VALUE "
                     . "("
-                    . $this->nombre. ","
-                    . $this->frecuencia. ","
-                    . $this->cantidadParticipantes. ","
-                    . $this->comentarios. ","
+                    . $this->nombre . ", "
+                    . $this->frecuencia . ", "
+                    . $this->cantidadParticipantes . ", "
+                    . $this->comentarios . ", "
                     . $this->leyenda
                     . ")";
         }else{//actualizar
@@ -163,53 +163,55 @@ class proyecto{
         }
         $this->guardarParticipantes();
     }
-    
+
     private function guardarParticipantes(){
         $query = "DELETE FROM usuariosenproyecto WHERE idproyectos = " . $this->id; //borro todos los usuarios
         $this->db->query($query);
         $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . listaQueryValuesUsuariosEnProyecto();
-        $this->db->query($query);//vuelvo a insertar la lista.
+        $this->db->query($query); //vuelvo a insertar la lista.
     }
-    
+
     /**
      * Inserta un usuario en la lista de usuarios
      * @param int $id identificación del usuario
      * @param int $donde Posición a insertar. Si vacío: justo antes del actual.
      */
     public function IngresarParticipante($id, $donde = NULL){
-        $donde = (is_null($donde)) ? ($this->siguienteParticipanteIndex - 1) : $donde;//decido si
+        $donde = (is_null($donde)) ? ($this->siguienteParticipanteIndex - 1) : $donde; //decido si obtuve valor de ubicación. Si no, por defecto
         $donde %= $this->cantidadParticipantes;
-        array_splice($this->participantes, $this->siguienteParticipanteIndex, 0, new usuario($id));
-        $this->cantidadParticipantes = count($this->participantes);//ver si es posible hacer +1, -1 (sin contar) de acuerdo a casos posibles
+        array_splice($this->participantes, $this->siguienteParticipanteIndex, 0,
+                     new usuario($id));
+        $this->cantidadParticipantes = count($this->participantes); //ver si es posible hacer +1, -1 (sin contar) de acuerdo a casos posibles
     }
-    
+
     /**
      * Elimina un participante de la lista de proyectos
      * @param int $id participante a eliminar
      */
     public function sacarParticipante($id){
-        $this->participantes = array_filter($this->participantes, array(new NumericComparisonFilter($id), 'isEqual'));
+        $this->participantes = array_filter($this->participantes,
+                                                array(new NumericComparisonFilter($id), 'isEqual'));
         USUARIO::sacarHuecosOrden($this->participantes);
-        $this->cantidadParticipantes = count($this->participantes);//ver si es posible hacer +1, -1 (sin contar) de acuerdo a casos posibles
+        $this->cantidadParticipantes = count($this->participantes); //ver si es posible hacer +1, -1 (sin contar) de acuerdo a casos posibles
     }
-    
+
     /**
      * Carga todos los proyectos 
      * @return Array(proyecto)
      */
     public static function todosLosProyectos(){
-        $l = new database(); //nueva db por ser static
-        $query = "SELECT distinct(idproyectos) as idproyectos FROM proyectos";
-        $res   = $l->query($query);
+        $l         = new database(); //nueva db por ser static
+        $query     = "SELECT distinct(idproyectos) as idproyectos FROM proyectos";
+        $res       = $l->query($query);
         $proyectos = array();
-        while(($row   = $res->fetch_assoc())){
+        while(($row      = $res->fetch_assoc())){
             $proyectos[] = new proyecto($row['idproyectos']);
         }
         return $proyectos;
     }
-    
+
     private function listaQueryValuesUsuariosEnProyecto(){
-        $i = 0;
+        $i   = 0;
         $res = '';
         do{
             $res .= '(';

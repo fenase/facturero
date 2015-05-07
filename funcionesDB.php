@@ -50,7 +50,7 @@ class database{
             return $res;
         }
     }
-    
+
     function ping(){
         return $this->db->ping();
     }

@@ -1,6 +1,6 @@
 <?php
 
-$link = require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'prepend.php');
+$link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
 
 
 
@@ -9,7 +9,7 @@ if($_POST['action'] == login){
     $query = "SELECT pass, UNIX_TIMESTAMP(ultimoLogin) as ultimoLogin, loginenabled "
             . "FROM usuarios "
             . "WHERE user = '$login'";
-    $res = $link->query($query);
+    $res   = $link->query($query);
     if($res->num_rows){
         if(($row = $res->fetch_assoc())){
             $passIngresada = $link->escape_string($_POST['pass']) . $row['ultimoLogin'];
@@ -19,11 +19,11 @@ if($_POST['action'] == login){
                 echo 'PASS INCORRECTO';
             }else{//GUARDA que no controlo errores
                 $_SESSION['user'] = $login;
-                $link->query("UPDATE usuarios SET ultimoLogin = NOW() WHERE user = '".$login ."'");
-                $res2 = $link->query("SELECT UNIX_TIMESTAMP(ultimoLogin) as ultimoLogin FROM usuarios WHERE user = '".$login ."'");
-                $row2 = $res2->fetch_assoc();
-                $nuevaPass = sha1($link->escape_string($_POST['pass']) . $row2['ultimoLogin']);
-                $link->query("UPDATE usuarios SET pass = '$nuevaPass' WHERE user = '".$login ."'");
+                $link->query("UPDATE usuarios SET ultimoLogin = NOW() WHERE user = '" . $login . "'");
+                $res2             = $link->query("SELECT UNIX_TIMESTAMP(ultimoLogin) as ultimoLogin FROM usuarios WHERE user = '" . $login . "'");
+                $row2             = $res2->fetch_assoc();
+                $nuevaPass        = sha1($link->escape_string($_POST['pass']) . $row2['ultimoLogin']);
+                $link->query("UPDATE usuarios SET pass = '$nuevaPass' WHERE user = '" . $login . "'");
                 header('location: ./main.php');
             }
         }
