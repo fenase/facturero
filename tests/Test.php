@@ -1,15 +1,18 @@
 <?php
 
 class TestOfUsuario extends UnitTestCase{
-
+    
+    private $usuario;
+    private $datos;
+    
     function __construct(){
         $esUnaPruebaEntoncesIgnorarSesiones = TRUE;
         chdir(dirname(dirname(__FILE__)));
         include 'prepend.php';
     }
-
-    function test_constructFromData(){
-        $datos   = array(
+    
+    function setUp(){
+        $this->datos   = array(
             'id'           => 9,
             'user'         => 'fsec',
             'pass'         => 'contra',
@@ -20,17 +23,91 @@ class TestOfUsuario extends UnitTestCase{
             'nombre'       => 'este es mi nombre',
             'orden'        => '3'
         );
-        $usuario = new usuario(NULL, USER_MANUAL_DEFINE, $datos);
+        $this->usuario = new usuario(NULL, USER_MANUAL_DEFINE, $this->datos);
+    }
+
+    function test_constructFromData(){
+        $this->assertEqual($this->usuario->getId(), $this->datos['id']);
+        $this->assertEqual($this->usuario->getUser(), $this->datos['user']);
+        $this->assertEqual($this->usuario->getPass(), $this->datos['pass']);
+        $this->assertEqual($this->usuario->getUltimoLogin(), $this->datos['ultimoLogin']);
+        $this->assertEqual($this->usuario->getLoginEnabled(), $this->datos['loginEnabled']);
+        $this->assertEqual($this->usuario->getVerificacion(), $this->datos['verificacion']);
+        $this->assertEqual($this->usuario->getMail(), $this->datos['mail']);
+        $this->assertEqual($this->usuario->getNombre(), $this->datos['nombre']);
+        $this->assertEqual($this->usuario->getOrden(), $this->datos['orden']);
+    }
+    
+    function testGetSetId(){
+        $this->assertEqual($this->usuario->getId(), $this->datos['id']);
+        $this->assertEqual($this->usuario->getUser(), $this->datos['user']);
+        $this->assertEqual($this->usuario->getPass(), $this->datos['pass']);
+        $this->assertEqual($this->usuario->getUltimoLogin(), $this->datos['ultimoLogin']);
+        $this->assertEqual($this->usuario->getLoginEnabled(), $this->datos['loginEnabled']);
+        $this->assertEqual($this->usuario->getVerificacion(), $this->datos['verificacion']);
+        $this->assertEqual($this->usuario->getMail(), $this->datos['mail']);
+        $this->assertEqual($this->usuario->getNombre(), $this->datos['nombre']);
+        $this->assertEqual($this->usuario->getOrden(), $this->datos['orden']);
         
-        $this->assertEqual($usuario->getId(), $datos['id']);
-        $this->assertEqual($usuario->getUser(), $datos['user']);
-        $this->assertEqual($usuario->getPass(), $datos['pass']);
-        $this->assertEqual($usuario->getUltimoLogin(), $datos['ultimoLogin']);
-        $this->assertEqual($usuario->getLoginEnabled(), $datos['loginEnabled']);
-        $this->assertEqual($usuario->getVerificacion(), $datos['verificacion']);
-        $this->assertEqual($usuario->getMail(), $datos['mail']);
-        $this->assertEqual($usuario->getNombre(), $datos['nombre']);
-        $this->assertEqual($usuario->getOrden(), $datos['orden']);
+        $this->usuario->setId(84);
+        
+        $this->assertEqual($this->usuario->getId(), 84);
+        $this->assertEqual($this->usuario->getUser(), $this->datos['user']);
+        $this->assertEqual($this->usuario->getPass(), $this->datos['pass']);
+        $this->assertEqual($this->usuario->getUltimoLogin(), $this->datos['ultimoLogin']);
+        $this->assertEqual($this->usuario->getLoginEnabled(), $this->datos['loginEnabled']);
+        $this->assertEqual($this->usuario->getVerificacion(), $this->datos['verificacion']);
+        $this->assertEqual($this->usuario->getMail(), $this->datos['mail']);
+        $this->assertEqual($this->usuario->getNombre(), $this->datos['nombre']);
+        $this->assertEqual($this->usuario->getOrden(), $this->datos['orden']);
+    }
+    
+    function testGetSetUser(){
+        $this->assertEqual($this->usuario->getId(), $this->datos['id']);
+        $this->assertEqual($this->usuario->getUser(), $this->datos['user']);
+        $this->assertEqual($this->usuario->getPass(), $this->datos['pass']);
+        $this->assertEqual($this->usuario->getUltimoLogin(), $this->datos['ultimoLogin']);
+        $this->assertEqual($this->usuario->getLoginEnabled(), $this->datos['loginEnabled']);
+        $this->assertEqual($this->usuario->getVerificacion(), $this->datos['verificacion']);
+        $this->assertEqual($this->usuario->getMail(), $this->datos['mail']);
+        $this->assertEqual($this->usuario->getNombre(), $this->datos['nombre']);
+        $this->assertEqual($this->usuario->getOrden(), $this->datos['orden']);
+        
+        $this->usuario->setUser('pepito');
+        
+        $this->assertEqual($this->usuario->getId(), $this->datos['id']);
+        $this->assertEqual($this->usuario->getUser(), 'pepito');
+        $this->assertEqual($this->usuario->getPass(), $this->datos['pass']);
+        $this->assertEqual($this->usuario->getUltimoLogin(), $this->datos['ultimoLogin']);
+        $this->assertEqual($this->usuario->getLoginEnabled(), $this->datos['loginEnabled']);
+        $this->assertEqual($this->usuario->getVerificacion(), $this->datos['verificacion']);
+        $this->assertEqual($this->usuario->getMail(), $this->datos['mail']);
+        $this->assertEqual($this->usuario->getNombre(), $this->datos['nombre']);
+        $this->assertEqual($this->usuario->getOrden(), $this->datos['orden']);
+    }
+    
+    function testGetSetPass(){
+        $this->assertEqual($this->usuario->getId(), $this->datos['id']);
+        $this->assertEqual($this->usuario->getUser(), $this->datos['user']);
+        $this->assertEqual($this->usuario->getPass(), $this->datos['pass']);
+        $this->assertEqual($this->usuario->getUltimoLogin(), $this->datos['ultimoLogin']);
+        $this->assertEqual($this->usuario->getLoginEnabled(), $this->datos['loginEnabled']);
+        $this->assertEqual($this->usuario->getVerificacion(), $this->datos['verificacion']);
+        $this->assertEqual($this->usuario->getMail(), $this->datos['mail']);
+        $this->assertEqual($this->usuario->getNombre(), $this->datos['nombre']);
+        $this->assertEqual($this->usuario->getOrden(), $this->datos['orden']);
+        
+        $this->usuario->setPass('pepito');
+        
+        $this->assertEqual($this->usuario->getId(), $this->datos['id']);
+        $this->assertEqual($this->usuario->getUser(), $this->datos['user']);
+        $this->assertEqual($this->usuario->getPass(), 'pepito');
+        $this->assertEqual($this->usuario->getUltimoLogin(), $this->datos['ultimoLogin']);
+        $this->assertEqual($this->usuario->getLoginEnabled(), $this->datos['loginEnabled']);
+        $this->assertEqual($this->usuario->getVerificacion(), $this->datos['verificacion']);
+        $this->assertEqual($this->usuario->getMail(), $this->datos['mail']);
+        $this->assertEqual($this->usuario->getNombre(), $this->datos['nombre']);
+        $this->assertEqual($this->usuario->getOrden(), $this->datos['orden']);
     }
 
 }
