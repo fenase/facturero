@@ -58,7 +58,83 @@ class usuario{
             $this->orden        = $datos['orden'];
         }
     }
+    
+    //<editor-fold>
+    public function getId(){
+        return $this->id;
+    }
 
+    public function getUser(){
+        return $this->user;
+    }
+
+    public function getPass(){
+        return $this->pass;
+    }
+
+    public function getUltimoLogin(){
+        return $this->ultimoLogin;
+    }
+
+    public function getLoginEnabled(){
+        return $this->loginEnabled;
+    }
+
+    public function getVerificacion(){
+        return $this->verificacion;
+    }
+
+    public function getMail(){
+        return $this->mail;
+    }
+
+    public function getNombre(){
+        return $this->nombre;
+    }
+
+    public function getOrden(){
+        return $this->orden;
+    }
+
+    public function setId($id){
+        $this->id = $id;
+    }
+
+    public function setUser($user){
+        $this->user = $user;
+    }
+
+    public function setPass($pass){
+        $this->pass = $pass;
+    }
+
+    public function setUltimoLogin($ultimoLogin){
+        $this->ultimoLogin = $ultimoLogin;
+    }
+
+    public function setLoginEnabled($loginEnabled){
+        $this->loginEnabled = $loginEnabled;
+    }
+
+    public function setVerificacion($verificacion){
+        $this->verificacion = $verificacion;
+    }
+
+    public function setMail($mail){
+        $this->mail = $mail;
+    }
+
+    public function setNombre($nombre){
+        $this->nombre = $nombre;
+    }
+
+    public function setOrden($orden){
+        $this->orden = $orden;
+    }
+    
+    //</editor-fold>Getters and Setters
+
+    
     /**
      * Crea masivamente objeto usuario desde usuarios obtenidos desde la base de datos
      * @param array $conjunto conjunto de datos con los que crear usuarios
