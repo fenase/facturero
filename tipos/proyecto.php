@@ -21,31 +21,33 @@ class proyecto{
         if(!$this->db || !$this->db->ping()){
             $this->db = new database();
         }
-        if(!$datos){//usuario existente
-            $query = "SELECT idproyectos, nombre, frecuencia, cantidadParticipantes, comentarios, leyenda "
+        if(!$datos){//proyecto existente
+            $query = "SELECT idproyectos, nombre, frecuencia, cantidadParticipantes, siguienteIndex, comentarios, leyenda "
                     . "FROM proyectos "
                     . "WHERE idproyectos = $id";
             $res   = $this->db->query($query);
             if(($row   = $res->fetch_assoc())){
-                $this->id                    = $id;
-                $this->nombre                = $row['nombre'];
-                $this->frecuencia            = $row['frecuencia'];
-                $this->cantidadParticipantes = $row['cantidadParticipantes'];
-                $this->comentarios           = $row['comentarios'];
-                $this->leyenda               = $row['leyenda'];
+                $this->id                         = $id;
+                $this->nombre                     = $row['nombre'];
+                $this->frecuencia                 = $row['frecuencia'];
+                $this->cantidadParticipantes      = $row['cantidadParticipantes'];
+                $this->siguienteParticipanteIndex = $row['siguienteIndex'];
+                $this->comentarios                = $row['comentarios'];
+                $this->leyenda                    = $row['leyenda'];
             }else{
                 throw new Exception("proyecto no encontrado");
             }
 
             $this->participantes = $this->participantesDelProyecto();
         }else{//usuario nuevo
-            $this->id                    = FALSE;
-            $this->nombre                = $datos['nombre'];
-            $this->frecuencia            = $datos['frecuencia'];
-            $this->cantidadParticipantes = 0;
-            $this->comentarios           = $datos['comentarios'];
-            $this->leyenda               = $datos['leyenda'];
-            $this->participantes         = array();
+            $this->id                         = FALSE;
+            $this->nombre                     = $datos['nombre'];
+            $this->frecuencia                 = $datos['frecuencia'];
+            $this->cantidadParticipantes      = 0;
+            $this->siguienteParticipanteIndex = 1;
+            $this->comentarios                = $datos['comentarios'];
+            $this->leyenda                    = $datos['leyenda'];
+            $this->participantes              = array();
         }
     }
 
