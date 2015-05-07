@@ -118,13 +118,13 @@ class usuario{
         $ultimoOrden = 1;
         usort($list, array('usuario', 'compararOrden'));//me aseguro que esté ordenado
         while($ultimoOrden <= count($list)){
-            $list[$ultimoOrden-1]->orden = $ultimoOrden;
+            $list[$ultimoOrden-1]->setOrden($ultimoOrden);
             $ultimoOrden++;
         }
     }
     
     public static function compararOrden($a, $b){
-        return ( ($a->orden == $b->orden) ? 0 : (($a->orden < $b->orden) ? -1 : 1) );
+        return ( ($a->getOrden() == $b->getOrden()) ? 0 : (($a->getOrden() < $b->getOrden()) ? -1 : 1) );
     }
 
 }
