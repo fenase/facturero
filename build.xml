@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="test" default="build">
+ <!-- By default, we assume all tools to be on the $PATH -->
+ <property name="toolsdir" value=""/>
+ <!-- ubicacion del ejecutable php -->
+ <property name="php" value="c:\\wamp\\bin\\php\\php5.1.6\\php"/>
+ <!-- ubicacion pruebas -->
+ <property name="testsuite" value="tests/TestSuite.php"/>
+ <!-- ubicacion destino pruebas -->
+ <property name="testoutput" value="build/logs/simpletest-results.xml"/>
+
+ <!-- Uncomment the following when the tools are in ${basedir}/vendor/bin -->
+ <!-- <property name="toolsdir" value="${basedir}/vendor/bin/"/> -->
+
+ <target name="build"
+         depends="prepare,lint, simpletest"
+         description=""/>
+
+
+ <target name="clean"
+	unless="clean.done"
+	description="Cleanup build artifacts">
+	<delete dir="${basedir}/build/phpdox"/>
+	<delete dir="${basedir}/build/logs"/>
+	<delete dir="${basedir}/build/api"/>
+	<property name="clean.done" value="true"/>
+ </target>
+
+ <target name="prepare"
+         unless="prepare.done"
+         depends="clean"
+         description="Prepare for build">
+  <mkdir dir="${basedir}/build/phpdox"/>
+  <mkdir dir="${basedir}/build/logs"/>
+  <mkdir dir="${basedir}/build/api"/>
+  <property name="prepare.done" value="true"/>
+ </target>
+
+ <target name="lint" description="Perform syntax check of sourcecode files">
+  <apply executable="${php}" failonerror="true">
+   <arg value="-l" />
+
+   <fileset dir="${basedir}">
+    <include name="**/*.php" />
+    <modified />
+   </fileset>
+
+   <fileset dir="${basedir}/tests">
+    <include name="**/*.php" />
+    <modified />
+   </fileset>
+  </apply>
+ </target>
+ 
+ 
+ <!-- Inline bash script to run TestSuite.php and pipe its results to simpletest-results.xml -->
+ <target name="simpletest" description="Run SimpleTest unit tests">
+     <exec dir="${basedir}" executable="cmd" failonerror="true">
+         <arg value="/c"/>
+         <arg line='${php} ${testsuite} > ${testoutput}' />
+     </exec>
+ </target>
+
+
+<!--
+ <target name="phpunit"
+         depends="prepare"
+         description="Run unit tests with PHPUnit">
+  <exec executable="${toolsdir}phpunit" failonerror="true">
+   <arg value="\-\-configuration"/>
+   <arg path="${basedir}/build/phpunit.xml"/>
+  </exec>
+ </target>
+ -->
+ <!--<target name="phpdox"
+         depends="phploc-ci,phpcs-ci,phpmd-ci"
+         description="Generate project documentation using phpDox">
+  <exec executable="${toolsdir}phpdox" dir="${basedir}/build"/>
+ </target>-->
+</project>
+
