@@ -182,14 +182,6 @@ class usuario{
         }
     }
 
-    public function crear(){
-        $query = "INSERT INTO usuarios (user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre) "
-                . "VALUE (" . $this->user . ',' . $this->pass . ',' . $this->ultimoLogin . ','
-                . $this->loginEnabled . ',' . $this->verificacion . ',' . $this->mail . ','
-                . $this->nombre . ',' . $this->id . ')';
-        $this->db->query($query);
-    }
-
     public static function sacarHuecosOrden(&$list){
         $ultimoOrden = 1;
         usort($list, array('usuario', 'compararOrden')); //me aseguro que esté ordenado

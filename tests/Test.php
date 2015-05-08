@@ -3,7 +3,11 @@
 class TestOfUsuario extends UnitTestCase{
     
     private $usuario;
+    private $usuario2;
+    private $usuario3;
     private $datos;
+    private $datos2;
+    private $datos3;
     
     function __construct(){
         $esUnaPruebaEntoncesIgnorarSesiones = TRUE;
@@ -23,7 +27,31 @@ class TestOfUsuario extends UnitTestCase{
             'nombre'       => 'este es mi nombre',
             'orden'        => '3'
         );
+        $this->datos2 = array(
+            'id'           => 2,
+            'user'         => 'fe',
+            'pass'         => 'contrase',
+            'ultimoLogin'  => '2015-05-01 04:19:59',
+            'loginEnabled' => 1,
+            'verificacion' => 'verifi',
+            'mail'         => 'mail2@server.com',
+            'nombre'       => 'este no es mi nombre',
+            'orden'        => '2'
+        );
+        $this->datos3 = array(
+            'id'           => 3,
+            'user'         => 'fs',
+            'pass'         => 'contrasena',
+            'ultimoLogin'  => '2015-04-09 07:19:59',
+            'loginEnabled' => 0,
+            'verificacion' => 'verificame',
+            'mail'         => 'mail@otroserver.com',
+            'nombre'       => 'este si es mi nombre',
+            'orden'        => '4'
+        );
         $this->usuario = new usuario(NULL, USER_MANUAL_DEFINE, $this->datos);
+        $this->usuario2 = new usuario(NULL, USER_MANUAL_DEFINE, $this->datos2);
+        $this->usuario3 = new usuario(NULL, USER_MANUAL_DEFINE, $this->datos3);
     }
 
     //<editor-fold>
@@ -256,6 +284,35 @@ class TestOfUsuario extends UnitTestCase{
     }
     //</editor-fold>Test Getters and Setters
     
+    function testCrearConjunto(){
+        $arreglo = array($this->datos, $this->datos2, $this->datos3);
+        $usuarios = usuario::crearUsuarios($arreglo);
+        
+        $this->assertEqual(count($usuarios), 3);
+        $this->assertIdentical($usuarios[0], $this->usuario);
+        $this->assertIdentical($usuarios[1], $this->usuario2);
+        $this->assertIdentical($usuarios[2], $this->usuario3);
+    }
     
+    function testSacarHuecosOrden(){
+        $arreglo = array($this->datos, $this->datos2, $this->datos3);
+        $usuarios = usuario::crearUsuarios($arreglo);
+        $this->assertNotEqual($usuarios[0]->getOrden(), 1);//orden == 9
+        usuario::sacarHuecosOrden($usuarios);
+        $this->assertEqual($usuarios[0]->getOrden(), 1);
+        $this->assertEqual($usuarios[1]->getOrden(), 2);
+        $this->assertEqual($usuarios[2]->getOrden(), 3);
+    }
+    
+    function testCompararOrden(){
+        $orden = usuario::compararOrden($this->usuario2, $this->usuario3);//u2->2; u3->4
+        $this->assertEqual($orden, -1);//u2->2 < u3->4
+        
+        $orden = usuario::compararOrden($this->usuario3, $this->usuario2);//u3->4, u2->2
+        $this->assertEqual($orden, 1);//u3->4 < u2->2
+        
+        $orden = usuario::compararOrden($this->usuario2, $this->usuario2);//u2->2, u2->2
+        $this->assertEqual($orden, 0);//u2->2 < u2->2
+    }
 
 }
