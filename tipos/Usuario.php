@@ -23,6 +23,7 @@ class Usuario{
         if(!$this->db || !$this->db->ping()){
             $this->db = new Database();
         }
+        $logger = new Logger();
         if($tipoID != USER_MANUAL_DEFINE){
             if($tipoID == USER_SEARCH_TIPE_ID){
                 $tipobusquedatext = 'idusuarios';
