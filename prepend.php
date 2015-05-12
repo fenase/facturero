@@ -11,8 +11,9 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'funcionesDB.php');
 //config devuelve la conexión a la base de datos
 $link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php');
 //tipos de datos
-require_once(dirname(__file__) . DIRECTORY_SEPARATOR . 'tipos' . DIRECTORY_SEPARATOR . 'proyecto.php');
-require_once(dirname(__file__) . DIRECTORY_SEPARATOR . 'tipos' . DIRECTORY_SEPARATOR . 'usuario.php');
+function __autoload($classname) {
+    require_once(directorySeparators(dirname(__FILE__)."/tipos/". $classname .".php"));
+}
 
 if(isset($esUnaPruebaEntoncesIgnorarSesiones)) {
         return $link;
