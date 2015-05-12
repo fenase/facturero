@@ -23,13 +23,14 @@ class Usuario{
         if(!$this->db || !$this->db->ping()){
             $this->db = new Database();
         }
+        $logger = new Logger();
         if($tipoID != USER_MANUAL_DEFINE){
             if($tipoID == USER_SEARCH_TIPE_ID){
                 $tipobusquedatext = 'idusuarios';
             }elseif($tipoID == USER_SEARCH_TIPE_USER){
                 $tipobusquedatext = 'user';
             }else{
-                throw new Exception('método de búsqueda no válido');
+                throw new Exception('método de búsqueda de usuario no válido');
             }
             $query = "SELECT idusuarios, user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre "
                     . "FROM usuarios "
@@ -46,7 +47,7 @@ class Usuario{
                 $this->nombre       = $datos['nombre'];
                 $this->orden        = NULL;
             }else{
-                throw new Exception('usuario no encontrado');
+                throw new Exception("usuario (".$identificacion.") no encontrado (usando ".$tipobusquedatext.")");
             }
         }else{
             $this->id           = $datos['id'];

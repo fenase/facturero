@@ -15,7 +15,7 @@ class Database{
     function __construct($host = DBHOST, $user = DBUSER, $pass = DBPASS, $db = DBDB){
         $this->db = new mysqli($host, $user, $pass, $db);
         if(mysqli_connect_error()){
-            die('imposible conectar a la base de datos: ' . mysqli_connect_error());
+            throw new Exception('imposible conectar a la base de datos: ' . mysqli_connect_error());
         }
     }
 
@@ -43,10 +43,11 @@ class Database{
      */
     function query($query){
         if(($res = $this->db->query($query)) === FALSE){
-            die('error en la query "' . $query . '": ' . $this->db->error);
-            return FALSE; //TODO: cambiar die por log.
+            throw new Exception('error en la query "' . $query . '": ' . $this->db->error);
         }else{
             $this->insert_id = $this->db->insert_id;
+            $logger = new Logger();
+            $logger->log('query exitosa: ' . $query . '');
             return $res;
         }
     }

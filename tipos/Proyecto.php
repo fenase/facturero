@@ -35,7 +35,7 @@ class Proyecto{
                 $this->comentarios                = $row['comentarios'];
                 $this->leyenda                    = $row['leyenda'];
             }else{
-                throw new Exception("proyecto no encontrado");
+                throw new Exception("proyecto (".$id.") no encontrado");
             }
 
             $this->participantes = $this->participantesDelProyecto();
