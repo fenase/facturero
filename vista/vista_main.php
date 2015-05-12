@@ -5,7 +5,7 @@
  *
  * @author FedSeckel
  */
-class vistaMain{
+class VistaMain{
 
     private $contenido;
 

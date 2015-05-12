@@ -5,7 +5,7 @@
  *
  * @author FedSeckel
  */
-class vistaProyecto{
+class VistaProyecto{
 
     private $contenido;
 

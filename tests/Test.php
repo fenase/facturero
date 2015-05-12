@@ -49,9 +49,9 @@ class TestOfUsuario extends UnitTestCase{
             'nombre'       => 'este si es mi nombre',
             'orden'        => '4'
         );
-        $this->usuario = new usuario(NULL, USER_MANUAL_DEFINE, $this->datos);
-        $this->usuario2 = new usuario(NULL, USER_MANUAL_DEFINE, $this->datos2);
-        $this->usuario3 = new usuario(NULL, USER_MANUAL_DEFINE, $this->datos3);
+        $this->usuario = new Usuario(NULL, USER_MANUAL_DEFINE, $this->datos);
+        $this->usuario2 = new Usuario(NULL, USER_MANUAL_DEFINE, $this->datos2);
+        $this->usuario3 = new Usuario(NULL, USER_MANUAL_DEFINE, $this->datos3);
     }
 
     //<editor-fold>
@@ -286,7 +286,7 @@ class TestOfUsuario extends UnitTestCase{
     
     function testCrearConjunto(){
         $arreglo = array($this->datos, $this->datos2, $this->datos3);
-        $usuarios = usuario::crearUsuarios($arreglo);
+        $usuarios = Usuario::crearUsuarios($arreglo);
         
         $this->assertEqual(count($usuarios), 3);
         $this->assertIdentical($usuarios[0], $this->usuario);
@@ -296,22 +296,22 @@ class TestOfUsuario extends UnitTestCase{
     
     function testSacarHuecosOrden(){
         $arreglo = array($this->datos, $this->datos2, $this->datos3);
-        $usuarios = usuario::crearUsuarios($arreglo);
+        $usuarios = Usuario::crearUsuarios($arreglo);
         $this->assertNotEqual($usuarios[0]->getOrden(), 1);//orden == 9
-        usuario::sacarHuecosOrden($usuarios);
+        Usuario::sacarHuecosOrden($usuarios);
         $this->assertEqual($usuarios[0]->getOrden(), 1);
         $this->assertEqual($usuarios[1]->getOrden(), 2);
         $this->assertEqual($usuarios[2]->getOrden(), 3);
     }
     
     function testCompararOrden(){
-        $orden = usuario::compararOrden($this->usuario2, $this->usuario3);//u2->2; u3->4
+        $orden = Usuario::compararOrden($this->usuario2, $this->usuario3);//u2->2; u3->4
         $this->assertEqual($orden, -1);//u2->2 < u3->4
         
-        $orden = usuario::compararOrden($this->usuario3, $this->usuario2);//u3->4, u2->2
+        $orden = Usuario::compararOrden($this->usuario3, $this->usuario2);//u3->4, u2->2
         $this->assertEqual($orden, 1);//u3->4 < u2->2
         
-        $orden = usuario::compararOrden($this->usuario2, $this->usuario2);//u2->2, u2->2
+        $orden = Usuario::compararOrden($this->usuario2, $this->usuario2);//u2->2, u2->2
         $this->assertEqual($orden, 0);//u2->2 < u2->2
     }
 

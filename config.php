@@ -6,7 +6,7 @@ define('DBUSER', 'root');
 define('DBPASS', '');
 define('DBDB', 'facturero');
 
-$link = new database(DBHOST, DBUSER, DBPASS, DBDB);
+$link = new Database(DBHOST, DBUSER, DBPASS, DBDB);
 
 $query    = "SELECT llave, valor, type FROM config WHERE 1";
 $res      = $link->query($query);

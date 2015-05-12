@@ -5,7 +5,7 @@
  * 
  * @author FedSeckel
  */
-class proyecto{
+class Proyecto{
 
     private $id;
     private $nombre;
@@ -19,7 +19,7 @@ class proyecto{
 
     function __construct($id, $datos = NULL){
         if(!$this->db || !$this->db->ping()){
-            $this->db = new database();
+            $this->db = new Database();
         }
         if(!$datos){//proyecto existente
             $query = "SELECT idproyectos, nombre, frecuencia, cantidadParticipantes, siguienteIndex, comentarios, leyenda "
@@ -133,7 +133,7 @@ class proyecto{
             $dato['orden']        = $row['orden'];
             $datos[]              = $dato;
         }
-        return usuario::crearUsuarios($datos);
+        return Usuario::crearUsuarios($datos);
     }
 
     /**
@@ -169,7 +169,7 @@ class proyecto{
     private function guardarParticipantes(){
         $query = "DELETE FROM usuariosenproyecto WHERE idproyectos = " . $this->id; //borro todos los usuarios
         $this->db->query($query);
-        $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . listaQueryValuesUsuariosEnProyecto();
+        $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . $this->listaQueryValuesUsuariosEnProyecto();
         $this->db->query($query); //vuelvo a insertar la lista.
     }
 
@@ -182,7 +182,7 @@ class proyecto{
         $donde = (is_null($donde)) ? ($this->siguienteParticipanteIndex - 1) : $donde; //decido si obtuve valor de ubicación. Si no, por defecto
         $donde %= $this->cantidadParticipantes;
         array_splice($this->participantes, $this->siguienteParticipanteIndex, 0,
-                     new usuario($id));
+                     new Usuario($id));
         $this->cantidadParticipantes = count($this->participantes); //ver si es posible hacer +1, -1 (sin contar) de acuerdo a casos posibles
     }
 
@@ -193,7 +193,7 @@ class proyecto{
     public function sacarParticipante($id){
         $this->participantes = array_filter($this->participantes,
                                                 array(new NumericComparisonFilter($id), 'isEqual'));
-        USUARIO::sacarHuecosOrden($this->participantes);
+        Usuario::sacarHuecosOrden($this->participantes);
         $this->cantidadParticipantes = count($this->participantes); //ver si es posible hacer +1, -1 (sin contar) de acuerdo a casos posibles
     }
 
@@ -202,12 +202,12 @@ class proyecto{
      * @return Array(proyecto)
      */
     public static function todosLosProyectos(){
-        $l         = new database(); //nueva db por ser static
+        $l         = new Database(); //nueva db por ser static
         $query     = "SELECT distinct(idproyectos) as idproyectos FROM proyectos";
         $res       = $l->query($query);
         $proyectos = array();
         while(($row      = $res->fetch_assoc())){
-            $proyectos[] = new proyecto($row['idproyectos']);
+            $proyectos[] = new Proyecto($row['idproyectos']);
         }
         return $proyectos;
     }

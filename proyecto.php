@@ -6,8 +6,8 @@ if(!idValido($_GET['id'])){
     redirect('./proyectos.php');
 }
 
-$vista    = new vistaProyecto('./template/proyecto.html');
-$proyecto = new proyecto($_GET['id']);
+$vista    = new VistaProyecto('./template/proyecto.html');
+$proyecto = new Proyecto($_GET['id']);
 
 
 if(idValido($_GET['sacarParticipante'])){
@@ -26,6 +26,5 @@ function idValido($id){
     $res = $res && isset($id);
     $res = $res && is_numeric($id);
     $res = $res && (floor($id) == $id);
-    $res = $res && ($res > 0);
-    return $res;
+    return ( $res && ($res > 0) );
 }

@@ -5,7 +5,7 @@
  *
  * @author fedseckel
  */
-class usuario{
+class Usuario{
 
     private $id;
     private $user;
@@ -21,13 +21,15 @@ class usuario{
     function __construct($identificacion, $tipoID = USER_SEARCH_TIPE_ID,
                          $datos = NULL){
         if(!$this->db || !$this->db->ping()){
-            $this->db = new database();
+            $this->db = new Database();
         }
         if($tipoID != USER_MANUAL_DEFINE){
             if($tipoID == USER_SEARCH_TIPE_ID){
                 $tipobusquedatext = 'idusuarios';
             }elseif($tipoID == USER_SEARCH_TIPE_USER){
                 $tipobusquedatext = 'user';
+            }else{
+                throw new Exception('método de búsqueda no válido');
             }
             $query = "SELECT idusuarios, user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre "
                     . "FROM usuarios "
@@ -143,7 +145,7 @@ class usuario{
     public static function crearUsuarios($conjunto){
         $usuarios = array();
         foreach($conjunto as $datos){
-            $usuarios[] = new usuario(NULL, USER_MANUAL_DEFINE, $datos);
+            $usuarios[] = new Usuario(NULL, USER_MANUAL_DEFINE, $datos);
         }
         return $usuarios;
     }

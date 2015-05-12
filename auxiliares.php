@@ -25,18 +25,24 @@ function get_topmost_script(){
     }else{
         $backtrace = debug_backtrace();
     }
-    $top_frame = array_pop($backtrace);
-    return $top_frame['file'];
+    $topFrame = array_pop($backtrace);
+    return $topFrame['file'];
 }
 
 function getClaseVista(){
+    //convierto separaciones de ruta para facilitar trabajo
     $topmost                         = explode(DIRECTORY_SEPARATOR, 
-                                                    str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, get_topmost_script())); //convierto separaciones de ruta para facilitar trabajo
-    $topmost[count($topmost) - 1]    = explode('.', $topmost[count($topmost) - 1]); //separo elementos de la ruta
-    $topmost[count($topmost) - 1][0] = 'vista_' . $topmost[count($topmost) - 1][0]; //modifico el nombre del archivo
-    $topmost[count($topmost)]        = implode('.', $topmost[count($topmost) - 1]); //revierto moviendo
-    $topmost[count($topmost) - 2]    = 'vista'; //agrego carpeta de vistas. -2 porque el arreglo creció
-    $filename                        = implode(DIRECTORY_SEPARATOR, $topmost); //revierto
+                                                    str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, get_topmost_script()));
+    //separo elementos de la ruta
+    $topmost[count($topmost) - 1]    = explode('.', $topmost[count($topmost) - 1]);
+    //modifico el nombre del archivo
+    $topmost[count($topmost) - 1][0] = 'vista_' . $topmost[count($topmost) - 1][0];
+    //revierto moviendo
+    $topmost[count($topmost)]        = implode('.', $topmost[count($topmost) - 1]);
+    //agrego carpeta de vistas. -2 porque el arreglo creció
+    $topmost[count($topmost) - 2]    = 'vista';
+    //revierto
+    $filename                        = implode(DIRECTORY_SEPARATOR, $topmost);
     if(file_exists($filename)){
         return $filename;
     }else{
