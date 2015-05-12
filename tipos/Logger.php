@@ -13,33 +13,18 @@ define('ERROR_LEVEL_ALL', 15);
 class Logger{
 
     private $baseLevel;
-    private static $handlers;
-    private $lastHandler;
-    private $lastName;
+    private static $handler;
+    private $filename;
 
-    function __construct($filename = NULL, $baseLevel = ERROR_LEVEL_ALL){
-        if(is_null($filename)){
-            $filename = directorySeparators(dirname(dirname(__FILE__)) . '/log/') . date('Ymd') . '.txt';
-        }
+    function __construct($baseLevel = ERROR_LEVEL_ALL){
+        $this->filename  = directorySeparators(dirname(dirname(__FILE__)) . '/log/') . date('Ym') . '.txt';
         $this->baseLevel = $baseLevel;
-        $dirname         = dirname($filename);
-        if(!is_dir($dirname)){
-            mkdir($dirname, 0755, true);
-        }
-        if(!self::$handlers[$filename]){
-            self::$handlers[$filename] = fopen($filename, "a");
-        }
-        $this->lastHandler = self::$handlers[$filename];
-        $this->lastName = $filename;
+        $this->abrir();
     }
 
     function __destruct(){
-//        foreach(self::$handlers as $key => $value){
-//            fclose($value);
-//            unset(self::$handlers[$key]);
-//        }
-        fclose(self::$handlers[$this->lastName]);
-        unset(self::$handlers[$this->lastName]);
+        fclose(self::$handler);
+        self::$handler = NULL;
     }
 
     function log($mensaje, $level = ERROR_LEVEL_INFO){
@@ -48,8 +33,20 @@ class Logger{
             $fecha = date('[Y-m-d H:i:s]');
             //nivel
             $nivel = $this->getNivel($level);
+            //abro archivo (sólo si es necesario: se controla desde adentro)
+            $this->abrir();
             //escribo mensaje
-            fwrite($this->lastHandler, $fecha . $nivel . $mensaje . "\r\n");
+            fwrite(self::$handler, $fecha . $nivel . $mensaje . "\r\n");
+        }
+    }
+
+    private function abrir(){
+        $dirname = dirname($this->filename);
+        if(!is_dir($dirname)){
+            mkdir($dirname, 0755, true);
+        }
+        if(!self::$handler){
+            self::$handler = fopen($this->filename, "a");
         }
     }
 
