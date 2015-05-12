@@ -1,5 +1,10 @@
 <?php
 
+function controlExcepciones($e){
+    die($e->getMessage());
+}
+set_exception_handler('controlExcepciones');
+
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'constantes.php');
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'auxiliares.php');
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'funcionesDB.php');
