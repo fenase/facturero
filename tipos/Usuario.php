@@ -29,7 +29,7 @@ class Usuario{
             }elseif($tipoID == USER_SEARCH_TIPE_USER){
                 $tipobusquedatext = 'user';
             }else{
-                throw new Exception('método de búsqueda no válido');
+                throw new Exception('método de búsqueda de usuario no válido');
             }
             $query = "SELECT idusuarios, user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre "
                     . "FROM usuarios "
@@ -46,7 +46,7 @@ class Usuario{
                 $this->nombre       = $datos['nombre'];
                 $this->orden        = NULL;
             }else{
-                throw new Exception('usuario no encontrado');
+                throw new Exception("usuario (".$identificacion.") no encontrado (usando ".$tipobusquedatext.")");
             }
         }else{
             $this->id           = $datos['id'];
@@ -98,40 +98,40 @@ class Usuario{
         return $this->orden;
     }
 
-    public function setId($id){
-        $this->id = $id;
+    public function setId($idIN){
+        $this->id = $idIN;
     }
 
-    public function setUser($user){
-        $this->user = $user;
+    public function setUser($userIN){
+        $this->user = $userIN;
     }
 
-    public function setPass($pass){
-        $this->pass = $pass;
+    public function setPass($passIN){
+        $this->pass = $passIN;
     }
 
-    public function setUltimoLogin($ultimoLogin){
-        $this->ultimoLogin = $ultimoLogin;
+    public function setUltimoLogin($ultimoLoginIN){
+        $this->ultimoLogin = $ultimoLoginIN;
     }
 
-    public function setLoginEnabled($loginEnabled){
-        $this->loginEnabled = $loginEnabled;
+    public function setLoginEnabled($loginEnabledIN){
+        $this->loginEnabled = $loginEnabledIN;
     }
 
-    public function setVerificacion($verificacion){
-        $this->verificacion = $verificacion;
+    public function setVerificacion($verificacionIN){
+        $this->verificacion = $verificacionIN;
     }
 
-    public function setMail($mail){
-        $this->mail = $mail;
+    public function setMail($mailIN){
+        $this->mail = $mailIN;
     }
 
-    public function setNombre($nombre){
-        $this->nombre = $nombre;
+    public function setNombre($nombreIN){
+        $this->nombre = $nombreIN;
     }
 
-    public function setOrden($orden){
-        $this->orden = $orden;
+    public function setOrden($ordenIN){
+        $this->orden = $ordenIN;
     }
     
     //</editor-fold>Getters and Setters

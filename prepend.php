@@ -1,6 +1,8 @@
 <?php
 
 function controlExcepciones($e){
+    $logger = new Logger();
+    $logger->log($e->getMessage(), ERROR_LEVEL_CRITICAL);
     die($e->getMessage());
 }
 set_exception_handler('controlExcepciones');

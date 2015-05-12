@@ -21,7 +21,8 @@ class Proyecto{
         if(!$this->db || !$this->db->ping()){
             $this->db = new Database();
         }
-        if(!$datos){//proyecto existente
+        if(!$datos){
+            //proyecto existente
             $query = "SELECT idproyectos, nombre, frecuencia, cantidadParticipantes, siguienteIndex, comentarios, leyenda "
                     . "FROM proyectos "
                     . "WHERE idproyectos = $id";
@@ -35,11 +36,12 @@ class Proyecto{
                 $this->comentarios                = $row['comentarios'];
                 $this->leyenda                    = $row['leyenda'];
             }else{
-                throw new Exception("proyecto no encontrado");
+                throw new Exception("proyecto (".$id.") no encontrado");
             }
 
             $this->participantes = $this->participantesDelProyecto();
-        }else{//usuario nuevo
+        }else{
+            //usuario nuevo
             $this->id                         = FALSE;
             $this->nombre                     = $datos['nombre'];
             $this->frecuencia                 = $datos['frecuencia'];
@@ -84,28 +86,28 @@ class Proyecto{
         return $this->leyenda;
     }
 
-    public function setNombre($nombre){
-        $this->nombre = $nombre;
+    public function setNombre($nombreIN){
+        $this->nombre = $nombreIN;
     }
 
-    public function setFrecuencia($frecuencia){
-        $this->frecuencia = $frecuencia;
+    public function setFrecuencia($frecuenciaIN){
+        $this->frecuencia = $frecuenciaIN;
     }
 
-    public function setParticipantes($participantes){
-        $this->participantes = $participantes;
+    public function setParticipantes($participantesIN){
+        $this->participantes = $participantesIN;
     }
 
     public function setSiguienteParticipanteIndex($i){
         $this->siguienteParticipanteIndex = $i;
     }
 
-    public function setComentarios($comentarios){
-        $this->comentarios = $comentarios;
+    public function setComentarios($comentariosIN){
+        $this->comentarios = $comentariosIN;
     }
 
-    public function setLeyenda($leyenda){
-        $this->leyenda = $leyenda;
+    public function setLeyenda($leyendaIN){
+        $this->leyenda = $leyendaIN;
     }
 
     //</editor-fold>Getters and Setters
@@ -140,7 +142,8 @@ class Proyecto{
      * Guarda el proyecto en la base de datos
      */
     public function guardar(){
-        if($this->id === FALSE){//nuevo proyecto
+        if($this->id === FALSE){
+            //nuevo proyecto
             $query = "INSERT INTO proyectos "
                     . "(nombre, frecuencia, cantidadParticipantes, comentarios, leyenda) VALUE "
                     . "("
@@ -150,7 +153,8 @@ class Proyecto{
                     . $this->comentarios . ", "
                     . $this->leyenda
                     . ")";
-        }else{//actualizar
+        }else{
+            //actualizar
             $query = "UPDATE proyectos SET "
                     . "nombre = " . $this->nombre
                     . "frecuencia = " . $this->frecuencia
@@ -167,10 +171,12 @@ class Proyecto{
     }
 
     private function guardarParticipantes(){
-        $query = "DELETE FROM usuariosenproyecto WHERE idproyectos = " . $this->id; //borro todos los usuarios
+        //borro todos los usuarios
+        $query = "DELETE FROM usuariosenproyecto WHERE idproyectos = " . $this->id;
         $this->db->query($query);
         $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . $this->listaQueryValuesUsuariosEnProyecto();
-        $this->db->query($query); //vuelvo a insertar la lista.
+        //vuelvo a insertar la lista.
+        $this->db->query($query);
     }
 
     /**
@@ -179,11 +185,13 @@ class Proyecto{
      * @param int $donde Posición a insertar. Si vacío: justo antes del actual.
      */
     public function IngresarParticipante($id, $donde = NULL){
-        $donde = (is_null($donde)) ? ($this->siguienteParticipanteIndex - 1) : $donde; //decido si obtuve valor de ubicación. Si no, por defecto
+        //decido si obtuve valor de ubicación. Si no, por defecto
+        if(is_null($donde)){
+            $donde = $this->siguienteParticipanteIndex - 1;
+        }
         $donde %= $this->cantidadParticipantes;
-        array_splice($this->participantes, $this->siguienteParticipanteIndex, 0,
-                     new Usuario($id));
-        $this->cantidadParticipantes = count($this->participantes); //ver si es posible hacer +1, -1 (sin contar) de acuerdo a casos posibles
+        array_splice($this->participantes, $this->siguienteParticipanteIndex, 0, new Usuario($id));
+        $this->cantidadParticipantes = count($this->participantes);
     }
 
     /**
@@ -194,7 +202,7 @@ class Proyecto{
         $this->participantes = array_filter($this->participantes,
                                                 array(new NumericComparisonFilter($id), 'isEqual'));
         Usuario::sacarHuecosOrden($this->participantes);
-        $this->cantidadParticipantes = count($this->participantes); //ver si es posible hacer +1, -1 (sin contar) de acuerdo a casos posibles
+        $this->cantidadParticipantes = count($this->participantes);
     }
 
     /**
@@ -202,7 +210,8 @@ class Proyecto{
      * @return Array(proyecto)
      */
     public static function todosLosProyectos(){
-        $l         = new Database(); //nueva db por ser static
+        //nueva db por ser static
+        $l         = new Database();
         $query     = "SELECT distinct(idproyectos) as idproyectos FROM proyectos";
         $res       = $l->query($query);
         $proyectos = array();
