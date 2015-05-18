@@ -38,6 +38,7 @@ class Proyecto{
             }else{
                 throw new Exception("proyecto (".$id.") no encontrado");
             }
+            $res->free();
 
             $this->participantes = $this->participantesDelProyecto();
         }else{
@@ -135,6 +136,7 @@ class Proyecto{
             $dato['orden']        = $row['orden'];
             $datos[]              = $dato;
         }
+        $res->free();
         return Usuario::crearUsuarios($datos);
     }
 
@@ -190,7 +192,7 @@ class Proyecto{
             $donde = $this->siguienteParticipanteIndex - 1;
         }
         $donde %= $this->cantidadParticipantes;
-        array_splice($this->participantes, $this->siguienteParticipanteIndex, 0, new Usuario($id));
+        array_splice($this->participantes, $donde, 0, new Usuario($id));
         $this->cantidadParticipantes = count($this->participantes);
     }
 
@@ -218,6 +220,7 @@ class Proyecto{
         while(($row      = $res->fetch_assoc())){
             $proyectos[] = new Proyecto($row['idproyectos']);
         }
+        $res->free();
         return $proyectos;
     }
 

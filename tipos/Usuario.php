@@ -48,6 +48,7 @@ class Usuario{
             }else{
                 throw new Exception("usuario (".$identificacion.") no encontrado (usando ".$tipobusquedatext.")");
             }
+            $res->free();
         }else{
             $this->id           = $datos['id'];
             $this->user         = $datos['user'];
@@ -157,7 +158,9 @@ class Usuario{
     public function existe(){
         $query = "SELECT 1 FROM usuarios WHERE idusuario = " . $this->id;
         $res   = $this->db->query($query);
-        return ($res->num_rows > 0);
+        $ret = ($res->num_rows > 0);
+        $res->free();
+        return $ret;
     }
 
     /**
@@ -213,7 +216,25 @@ class Usuario{
         while($row   = $res->fetch_assoc()){
             $ret[] = array('id' => $row['idproyectos'], 'nombre' => $row['nombre']);
         }
+        $res->free();
         return $ret;
+    }
+
+    /**
+     * Carga todos los usuarios 
+     * @return Array(usuario)
+     */
+    public static function todosLosUsuarios(){
+        //nueva db por ser static
+        $l         = new Database();
+        $query     = "SELECT distinct(idusuarios) as idusuarios FROM usuarios";
+        $res       = $l->query($query);
+        $usuarios = array();
+        while(($row      = $res->fetch_assoc())){
+            $usuarios[] = new Usuario($row['idusuarios']);
+        }
+        $res->free();
+        return $usuarios;
     }
 
 }
