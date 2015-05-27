@@ -15,8 +15,9 @@ $link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php');
 
 //tipos de datos
 function __autoload($classname){
-    $filename = array('clases'    => directorySeparators(dirname(__FILE__) . "/tipos/" . $classname . ".php")
-        , 'librerias' => directorySeparators(dirname(__FILE__) . "/lib/" . $classname . ".lib.php"));
+    $filename = array(
+        'clases'    => directorySeparators(dirname(__FILE__) . "/tipos/" . $classname . ".php"),
+        'librerias' => directorySeparators(dirname(__FILE__) . "/lib/" . $classname . ".lib.php"));
     if(file_exists($filename['clases'])){
         //clases
         require_once($filename['clases']);

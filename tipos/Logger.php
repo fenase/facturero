@@ -15,11 +15,13 @@ class Logger{
     private $baseLevel;
     private static $handler;
     private $filename;
+    private $noPuedoAbrirArchivo;
 
     function __construct($baseLevel = ERROR_LEVEL_ALL){
-        $this->filename  = directorySeparators(dirname(dirname(__FILE__)) . '/log/') . date('Ym') . '.txt';
+        $this->filename  = directorySeparators(dirname(dirname(__FILE__)) . '/log/') . date('Ymd') . '.txt';
         $this->baseLevel = $baseLevel;
         $this->abrir();
+        $this->rotar();
     }
 
     function __destruct(){
@@ -36,7 +38,14 @@ class Logger{
             //abro archivo (sólo si es necesario: se controla desde adentro)
             $this->abrir();
             //escribo mensaje
-            fwrite(self::$handler, $fecha . $nivel . $mensaje . "\r\n");
+            if(!$this->noPuedoAbrirArchivo){
+                fwrite(self::$handler, $fecha . $nivel . $mensaje . "\r\n");
+            }else{
+                /* se debería cambiar la forma en la que reacciona en caso de no poder guardar logs.
+                 * mandar todo por pantalla no es la mejor opción
+                 */
+                print("ERROR DE LOGGER. Mensaje: <<" . $fecha . $nivel . $mensaje . ">>\r\n");
+            }
         }
     }
 
@@ -47,6 +56,12 @@ class Logger{
         }
         if(!self::$handler){
             self::$handler = fopen($this->filename, "a");
+        }
+        //control de fallas
+        if(!self::$handler){
+            $this->noPuedoAbrirArchivo = TRUE;
+        }else{
+            $this->noPuedoAbrirArchivo = FALSE;
         }
     }
 
@@ -70,6 +85,52 @@ class Logger{
                 break;
         }
         return $nivel;
+    }
+
+    /**
+     * Comprime los registros del mes pasado
+     */
+    private function rotar(){
+        //obtengo patrones
+        $dir    = directorySeparators(dirname(dirname(__FILE__)) . '/log/');
+        $mes    = date('Ym', strtotime("-1 month"));
+        //ver cómo rotar en caso que haya archivos de más de un mes.
+        $patron = $mes . '*.txt';
+        $files  = glob($dir . $patron);
+        //si no hay archivos para comprimir, salgo y continuo por otro lado
+        if(!$files || count($files) == 0){
+            return;
+        }
+        //comprimo archivos del mes pasado
+        if($this->rotarComprimir($files, $dir . $mes . '.zip')){
+            //elimino los archivos comprimidos
+            $this->rotarEliminarArchivos($files);
+        }
+    }
+
+    private function rotarComprimir($files, $archivoDestino){
+        try{
+            $archive = new PclZip($archivoDestino);
+            $addRet  = $archive->add($files, PCLZIP_OPT_REMOVE_ALL_PATH);
+            if(!$addRet){
+                throw new Exception("Error: " . $archive->errorInfo(true));
+            }
+            $exito = TRUE;
+        }catch(Exception $e){
+            $this->log('Imposible almcenar archivos de registro antíguos. ' . $e->getMessage(),
+                       ERROR_LEVEL_WARNING);
+            $exito = FALSE;
+        }
+        return $exito;
+    }
+
+    private function rotarEliminarArchivos($files){
+        foreach($files as $file){
+            if(!@unlink($file)){
+                $this->log("No se puede eliminar el archivo de log almacenado $file",
+                           ERROR_LEVEL_WARNING);
+            }
+        }
     }
 
 }
