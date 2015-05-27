@@ -12,13 +12,24 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'auxiliares.php');
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'funcionesDB.php');
 //config devuelve la conexión a la base de datos
 $link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php');
+
 //tipos de datos
-function __autoload($classname) {
-    require_once(directorySeparators(dirname(__FILE__)."/tipos/". $classname .".php"));
+function __autoload($classname){
+    $filename = array('clases'    => directorySeparators(dirname(__FILE__) . "/tipos/" . $classname . ".php")
+        , 'librerias' => directorySeparators(dirname(__FILE__) . "/lib/" . $classname . ".lib.php"));
+    if(file_exists($filename['clases'])){
+        //clases
+        require_once($filename['clases']);
+    }elseif(file_exists($filename['librerias'])){
+        //clases
+        require_once($filename['librerias']);
+    }else{
+        throw new Exception("Clase $classname no encontrada");
+    }
 }
 
-if(isset($esUnaPruebaEntoncesIgnorarSesiones)) {
-        return $link;
+if(isset($esUnaPruebaEntoncesIgnorarSesiones)){
+    return $link;
 }
 
 if(php_sapi_name() != 'cli' && !isset($esUnaPruebaDelProceso)){
