@@ -18,8 +18,7 @@ while($row      = $res->fetch_assoc()){
             break;
         case 'BOOLEAN':
             if(!defined($row['llave'])){
-                define($row['llave'],
-                       ((strtoupper($row['valor']) == 'TRUE') ? TRUE : FALSE));
+                define($row['llave'], ((strtoupper($row['valor']) == 'TRUE') ? TRUE : FALSE));
             }
             break;
         default:

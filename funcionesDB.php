@@ -44,7 +44,6 @@ class Database{
      * Ejecuta la consulta en la conexión abierta.
      * @param string $query Consulta
      * @return mixed MYSQLI_RESULT resultado en caso de éxito. BOOL FALSE en caso de falla
-     * @todo Ahora, en caso de falla, termina el script con en mensaje de error. Se debería loguear y no salir (que quien llama decida si se termina o no).
      */
     function query($query){
         if(($res = $this->db->query($query)) === FALSE){

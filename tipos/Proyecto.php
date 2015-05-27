@@ -183,26 +183,26 @@ class Proyecto{
 
     /**
      * Inserta un usuario en la lista de usuarios
-     * @param int $id identificación del usuario
+     * @param int $idIn identificación del usuario
      * @param int $donde Posición a insertar. Si vacío: justo antes del actual.
      */
-    public function IngresarParticipante($id, $donde = NULL){
+    public function IngresarParticipante($idIn, $donde = NULL){
         //decido si obtuve valor de ubicación. Si no, por defecto
         if(is_null($donde)){
             $donde = $this->siguienteParticipanteIndex - 1;
         }
         $donde %= $this->cantidadParticipantes;
-        array_splice($this->participantes, $donde, 0, new Usuario($id));
+        array_splice($this->participantes, $donde, 0, new Usuario($idIn));
         $this->cantidadParticipantes = count($this->participantes);
     }
 
     /**
      * Elimina un participante de la lista de proyectos
-     * @param int $id participante a eliminar
+     * @param int $idIn participante a eliminar
      */
-    public function sacarParticipante($id){
+    public function sacarParticipante($idIn){
         $this->participantes = array_filter($this->participantes,
-                                                array(new NumericComparisonFilter($id), 'isEqual'));
+                                                array(new NumericComparisonFilter($idIn), 'isEqual'));
         Usuario::sacarHuecosOrden($this->participantes);
         $this->cantidadParticipantes = count($this->participantes);
     }
