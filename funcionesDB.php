@@ -16,6 +16,9 @@ class Database{
         $this->db = new mysqli($host, $user, $pass, $db);
         if(mysqli_connect_error()){
             throw new Exception('imposible conectar a la base de datos: ' . mysqli_connect_error());
+        }else{
+            $logger = new Logger();
+            $logger->log("Conectado a la base de datos $db en $host (id: ".$this->db->thread_id.")");
         }
     }
 
@@ -31,8 +34,10 @@ class Database{
      * Privada ya que no quiero que queden objetos sin conexión.
      */
     private function cerrar(){
-        $this->db->kill($this->db->thread_id);
+        $this->db->kill($tid = $this->db->thread_id);
         $this->db->close();
+        $logger = new Logger();
+        $logger->log("Cerrada la conexión a la base de datos id $tid");
     }
 
     /**

@@ -15,13 +15,14 @@ class Usuario{
     private $verificacion;
     private $mail;
     private $nombre;
-    private $orden; //sólo tiene sentido si el usuario pertenece a un proyecto
+    //Orden sólo tiene sentido si el usuario pertenece a un proyecto
+    private $orden;
     static private $db;
 
     function __construct($identificacion, $tipoID = USER_SEARCH_TIPE_ID,
                          $datos = NULL){
-        if(!$this->db || !$this->db->ping()){
-            $this->db = new Database();
+        if(!self::$db || !self::$db->ping()){
+            self::$db = new Database();
         }
         if($tipoID != USER_MANUAL_DEFINE){
             if($tipoID == USER_SEARCH_TIPE_ID){
@@ -34,7 +35,7 @@ class Usuario{
             $query = "SELECT idusuarios, user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre "
                     . "FROM usuarios "
                     . "WHERE $tipobusquedatext = $identificacion";
-            $res   = $this->db->query($query);
+            $res   = self::$db->query($query);
             if(($datos = $res->fetch_assoc())){
                 $this->id           = $datos['idusuarios'];
                 $this->user         = $datos['user'];
@@ -157,7 +158,7 @@ class Usuario{
      */
     public function existe(){
         $query = "SELECT 1 FROM usuarios WHERE idusuario = " . $this->id;
-        $res   = $this->db->query($query);
+        $res   = self::$db->query($query);
         $ret = ($res->num_rows > 0);
         $res->free();
         return $ret;
@@ -177,13 +178,13 @@ class Usuario{
                     . ", mail = " . $this->mail
                     . ", nombre = " . $this->nombre
                     . "WHERE idusuario = " . $this->id;
-            $this->db->query($query);
+            self::$db->query($query);
         }else{
             $query    = "INSERT INTO usuarios (user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre) VALUE ("
                     . $this->user . ", " . $this->pass . ", " . $this->ultimoLogin . ", " . $this->loginEnabled . ", "
                     . $this->verificacion . ", " . $this->mail . ", " . $this->nombre . ")";
-            $this->db->query($query);
-            $this->id = $this->db->insert_id;
+            self::$db->query($query);
+            $this->id = self::$db->insert_id;
         }
     }
 
@@ -212,7 +213,7 @@ class Usuario{
                 . "JOIN proyectos p ON p.idproyectos = up.idproyectos "
                 . "WHERE up.idusuarios = " . $this->id . " "
                 . "ORDER BY p.nombre ASC";
-        $res   = $this->db->query($query);
+        $res   = self::$db->query($query);
         while($row   = $res->fetch_assoc()){
             $ret[] = array('id' => $row['idproyectos'], 'nombre' => $row['nombre']);
         }

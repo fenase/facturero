@@ -18,15 +18,15 @@ class Proyecto{
     private static $db;
 
     function __construct($id, $datos = NULL){
-        if(!$this->db || !$this->db->ping()){
-            $this->db = new Database();
+        if(!self::$db || !self::$db->ping()){
+            self::$db = new Database();
         }
         if(!$datos){
             //proyecto existente
             $query = "SELECT idproyectos, nombre, frecuencia, cantidadParticipantes, siguienteIndex, comentarios, leyenda "
                     . "FROM proyectos "
                     . "WHERE idproyectos = $id";
-            $res   = $this->db->query($query);
+            $res   = self::$db->query($query);
             if(($row   = $res->fetch_assoc())){
                 $this->id                         = $id;
                 $this->nombre                     = $row['nombre'];
@@ -122,7 +122,7 @@ class Proyecto{
                 . "FROM usuariosenproyecto up "
                 . "JOIN usuarios u ON up.idUsuarios = u.idUsuarios "
                 . "WHERE up.idproyectos = " . $this->id;
-        $res   = $this->db->query($query);
+        $res   = self::$db->query($query);
         $datos = array();
         while(($row   = $res->fetch_assoc())){
             $dato['id']           = $row['idUsuarios'];
@@ -165,9 +165,9 @@ class Proyecto{
                     . "leyenda = " . $this->leyenda
                     . "WHERE id = " . $this->id;
         }
-        $this->db->query($query);
+        self::$db->query($query);
         if($this->id === FALSE){
-            $this->id = $this->db->insert_id;
+            $this->id = self::$db->insert_id;
         }
         $this->guardarParticipantes();
     }
@@ -175,10 +175,10 @@ class Proyecto{
     private function guardarParticipantes(){
         //borro todos los usuarios
         $query = "DELETE FROM usuariosenproyecto WHERE idproyectos = " . $this->id;
-        $this->db->query($query);
+        self::$db->query($query);
         $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . $this->listaQueryValuesUsuariosEnProyecto();
         //vuelvo a insertar la lista.
-        $this->db->query($query);
+        self::$db->query($query);
     }
 
     /**
