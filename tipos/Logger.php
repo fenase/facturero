@@ -25,8 +25,10 @@ class Logger{
     }
 
     function __destruct(){
-        fclose(self::$handler);
-        self::$handler = NULL;
+        if(self::$handler){
+            fclose(self::$handler);
+            self::$handler = NULL;
+        }
     }
 
     function log($mensaje, $level = ERROR_LEVEL_INFO){

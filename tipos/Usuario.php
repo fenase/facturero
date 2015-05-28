@@ -29,6 +29,7 @@ class Usuario{
                 $tipobusquedatext = 'idusuarios';
             }elseif($tipoID == USER_SEARCH_TIPE_USER){
                 $tipobusquedatext = 'user';
+                $identificacion   = "'" . $identificacion . "'";
             }else{
                 throw new Exception('método de búsqueda de usuario no válido');
             }
@@ -47,7 +48,16 @@ class Usuario{
                 $this->nombre       = $datos['nombre'];
                 $this->orden        = NULL;
             }else{
-                throw new Exception("usuario (".$identificacion.") no encontrado (usando ".$tipobusquedatext.")");
+                if($tipoID == USER_SEARCH_TIPE_ID){
+                    //si estoy buscando por ID no puede nunca faltar un usuario. Que falte es falla grave.
+                    throw new Exception("usuario (" . $identificacion . ") no encontrado (usando " . $tipobusquedatext . ")");
+                }else{
+                    //por nombre
+                    $logger   = new Logger();
+                    $logger->log("usuario (" . $identificacion . ") no encontrado (usando " . $tipobusquedatext . ")",
+                                 ERROR_LEVEL_INFO);
+                    $this->id = FALSE;
+                }
             }
             $res->free();
         }else{
@@ -62,7 +72,7 @@ class Usuario{
             $this->orden        = $datos['orden'];
         }
     }
-    
+
     //<editor-fold>
     public function getId(){
         return $this->id;
@@ -78,6 +88,10 @@ class Usuario{
 
     public function getUltimoLogin(){
         return $this->ultimoLogin;
+    }
+
+    public function getUltimoLoginTimestamp(){
+        return strtotime($this->ultimoLogin);
     }
 
     public function getLoginEnabled(){
@@ -112,8 +126,18 @@ class Usuario{
         $this->pass = $passIN;
     }
 
-    public function setUltimoLogin($ultimoLoginIN){
+    public function setUltimoLogin($ultimoLoginIN = NULL){
+        if(is_null($ultimoLoginIN)){
+            $ultimoLoginIN = date('Y-m-d H:i:s');
+        }
         $this->ultimoLogin = $ultimoLoginIN;
+    }
+
+    public function setUltimoLoginTimestamp($timestamp = NULL){
+        if(is_null($timestamp)){
+            $timestamp = time();
+        }
+        $this->ultimoLogin = date('Y-m-d H:i:s', $timestamp);
     }
 
     public function setLoginEnabled($loginEnabledIN){
@@ -135,10 +159,9 @@ class Usuario{
     public function setOrden($ordenIN){
         $this->orden = $ordenIN;
     }
-    
+
     //</editor-fold>Getters and Setters
 
-    
     /**
      * Crea masivamente objeto usuario desde usuarios obtenidos desde la base de datos
      * @param array $conjunto conjunto de datos con los que crear usuarios
@@ -157,9 +180,9 @@ class Usuario{
      * @return boolean
      */
     public function existe(){
-        $query = "SELECT 1 FROM usuarios WHERE idusuario = " . $this->id;
+        $query = "SELECT 1 FROM usuarios WHERE idusuarios = " . $this->id;
         $res   = self::$db->query($query);
-        $ret = ($res->num_rows > 0);
+        $ret   = ($res->num_rows > 0);
         $res->free();
         return $ret;
     }
@@ -170,19 +193,19 @@ class Usuario{
     public function guardar(){
         if($this->existe()){
             $query = "UPDATE usuarios "
-                    . "SET user = " . $this->user
-                    . ", pass = " . $this->pass
-                    . ", ultimoLogin = " . $this->ultimoLogin
-                    . ", loginenabled = " . $this->loginEnabled
-                    . ", verificacion = " . $this->verificacion
-                    . ", mail = " . $this->mail
-                    . ", nombre = " . $this->nombre
-                    . "WHERE idusuario = " . $this->id;
+                    . "SET user = '" . $this->user . "'"
+                    . ", pass = '" . $this->pass . "'"
+                    . ", ultimoLogin = '" . $this->ultimoLogin . "'"
+                    . ", loginenabled = '" . $this->loginEnabled . "'"
+                    . ", verificacion = '" . $this->verificacion . "'"
+                    . ", mail = '" . $this->mail . "'"
+                    . ", nombre = '" . $this->nombre . "'"
+                    . "WHERE idusuarios = " . $this->id;
             self::$db->query($query);
         }else{
-            $query    = "INSERT INTO usuarios (user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre) VALUE ("
-                    . $this->user . ", " . $this->pass . ", " . $this->ultimoLogin . ", " . $this->loginEnabled . ", "
-                    . $this->verificacion . ", " . $this->mail . ", " . $this->nombre . ")";
+            $query    = "INSERT INTO usuarios (user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre) VALUE ('"
+                    . $this->user . ", '" . $this->pass . "', '" . $this->ultimoLogin . "', '" . $this->loginEnabled . "', '"
+                    . $this->verificacion . "', '" . $this->mail . "', '" . $this->nombre . "')";
             self::$db->query($query);
             $this->id = self::$db->insert_id;
         }
@@ -199,8 +222,8 @@ class Usuario{
     }
 
     public static function compararOrden($a, $b){
-        return ( ($a->getOrden() == $b->getOrden()) ? 0 : 
-                                        (($a->getOrden() < $b->getOrden()) ? -1 : 1) );
+        return ( ($a->getOrden() == $b->getOrden()) ? 0 :
+                        (($a->getOrden() < $b->getOrden()) ? -1 : 1) );
     }
 
     /**
@@ -228,9 +251,9 @@ class Usuario{
      */
     public static function todosLosUsuarios(){
         //nueva db por ser static
-        $l         = new Database();
-        $query     = "SELECT distinct(idusuarios) as idusuarios FROM usuarios";
-        $res       = $l->query($query);
+        $l        = new Database();
+        $query    = "SELECT distinct(idusuarios) as idusuarios FROM usuarios";
+        $res      = $l->query($query);
         $usuarios = array();
         while(($row      = $res->fetch_assoc())){
             $usuarios[] = new Usuario($row['idusuarios']);
