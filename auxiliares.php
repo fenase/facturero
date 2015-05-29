@@ -31,7 +31,7 @@ function get_topmost_script(){
 
 function getClaseVista(){
     //convierto separaciones de ruta para facilitar trabajo
-    $topmost                         = explode(DIRECTORY_SEPARATOR, 
+    $topmost                         = explode(DIRECTORY_SEPARATOR,
                                                     str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, get_topmost_script()));
     //separo elementos de la ruta
     $topmost[count($topmost) - 1]    = explode('.', $topmost[count($topmost) - 1]);
@@ -57,6 +57,34 @@ function redirect($url){
 
 function startsWith($string, $comienzo){
     return ($comienzo === '') || (strpos($string, $comienzo) === 0);
+}
+
+/**
+ * Une los archivos en uno solo. excepcion en caso de falla.
+ * @param string $archivoDestino Ubicación del archivo destino
+ * @param array(string) $files Array de rutas a archivos
+ * @return array(string) unión de $files con el archivo de salida (nuevo arreglo de archivos)
+ * @throws Exception en caso de no poder abrir archivos
+ */
+function unirArchivos($archivoDestino, $files){
+    $out = fopen($archivoDestino, 'w');
+    $res = array();
+    if(!$out){
+        throw new Exception("Imposible abrir archivo $archivoDestino para escritura");
+    }else{
+        $res = array_merge($res, $files, array($archivoDestino));
+    }
+    foreach($files as $filename){
+        $temp = file_get_contents($filename);
+        if($temp === FALSE){
+            fclose($out);
+            @unlink($archivoDestino);
+            throw new Exception("Imposible abrir archivo $filename para lectura");
+        }
+        fwrite($out, $temp);
+    }
+    fclose($out);
+    return $res;
 }
 
 class NumericComparisonFilter{

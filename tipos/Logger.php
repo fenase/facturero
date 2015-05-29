@@ -104,16 +104,17 @@ class Logger{
             return;
         }
         //comprimo archivos del mes pasado
-        if($this->rotarComprimir($files, $dir . $mes . '.zip')){
+        if($this->rotarComprimir($files, $dir . $mes . '.txt')){
             //elimino los archivos comprimidos
             $this->rotarEliminarArchivos($files);
         }
     }
 
-    private function rotarComprimir($files, $archivoDestino){
+    private function rotarComprimir(&$files, $archivoDestino){
         try{
-            $archive = new PclZip($archivoDestino);
-            $addRet  = $archive->add($files, PCLZIP_OPT_REMOVE_ALL_PATH);
+            $files   = unirArchivos($archivoDestino, $files);
+            $archive = new PclZip($archivoDestino . '.zip');
+            $addRet  = $archive->add($archivoDestino, PCLZIP_OPT_REMOVE_ALL_PATH);
             if(!$addRet){
                 throw new Exception("Error: " . $archive->errorInfo(true));
             }
