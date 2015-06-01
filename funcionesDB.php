@@ -2,8 +2,10 @@
 
 class Database{
 
-    private $db;
     var $insert_id;
+    private static $links;
+    private $thisLink;
+    private static $references;
 
     /**
      * Constructor. Abre una conexión MySQLi
@@ -13,12 +15,20 @@ class Database{
      * @param type $db
      */
     function __construct($host = DBHOST, $user = DBUSER, $pass = DBPASS, $db = DBDB){
-        $this->db = new mysqli($host, $user, $pass, $db);
-        if(mysqli_connect_error()){
-            throw new Exception('imposible conectar a la base de datos: ' . mysqli_connect_error());
+        $this->thisLink = "h:$host::u:$user::p:$pass::d:$db";
+        if(!self::$links[$this->thisLink]){
+            self::$links[$this->thisLink] = new mysqli($host, $user, $pass, $db);
+            if(mysqli_connect_error()){
+                throw new Exception('imposible conectar a la base de datos: ' . mysqli_connect_error());
+            }else{
+                self::$references++;
+                $logger = new Logger();
+                $logger->log("Conectado a la base de datos $db en $host (id: ".self::$links[$this->thisLink]->thread_id.") (Refs=".self::$references.")");               
+            }
         }else{
+            self::$references++;
             $logger = new Logger();
-            $logger->log("Conectado a la base de datos $db en $host (id: ".$this->db->thread_id.")");
+            $logger->log("Base de datos $db en $host ya conectada. Reutilizando vínculo (Refs=".self::$references.")");
         }
     }
 
@@ -26,7 +36,13 @@ class Database{
      * Se invoca cuando se pierden todas las referencias al objeto (o al final del script).
      */
     function __destruct(){
-        $this->cerrar();
+        self::$references--;
+        if(!self::$references){
+            $this->cerrar();
+        }else{
+            $logger = new Logger;        
+            $logger->log("No se cierra base de datos ya que quedan referencias (Refs=".self::$references.")");
+        }
     }
 
     /**
@@ -34,8 +50,8 @@ class Database{
      * Privada ya que no quiero que queden objetos sin conexión.
      */
     private function cerrar(){
-        $this->db->kill($tid = $this->db->thread_id);
-        $this->db->close();
+        @self::$links[$this->thisLink]->kill($tid = self::$links[$this->thisLink]->thread_id);
+        @self::$links[$this->thisLink]->close();
         $logger = new Logger();
         $logger->log("Cerrada la conexión a la base de datos id $tid");
     }
@@ -46,10 +62,10 @@ class Database{
      * @return mixed MYSQLI_RESULT resultado en caso de éxito. BOOL FALSE en caso de falla
      */
     function query($query){
-        if(($res = $this->db->query($query)) === FALSE){
-            throw new Exception('error en la query "' . $query . '": ' . $this->db->error);
+        if(($res = self::$links[$this->thisLink]->query($query)) === FALSE){
+            throw new Exception('error en la query "' . $query . '": ' . self::$links[$this->thisLink]->error);
         }else{
-            $this->insert_id = $this->db->insert_id;
+            $this->insert_id = self::$links[$this->thisLink]->insert_id;
             $logger = new Logger();
             $logger->log('query exitosa: ' . $query . '');
             return $res;
@@ -57,7 +73,7 @@ class Database{
     }
 
     function ping(){
-        return $this->db->ping();
+        return self::$links[$this->thisLink]->ping();
     }
 
     /**
@@ -66,7 +82,7 @@ class Database{
      * @return type
      */
     function escape_string($string){
-        return $this->db->escape_string($string);
+        return self::$links[$this->thisLink]->escape_string($string);
     }
 
 }
