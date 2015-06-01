@@ -106,6 +106,10 @@ class NumericComparisonFilter{
     function isEqual($i){
         return $i == $this->num;
     }
+    
+    function isNotEqual($i){
+        return $i != $this->num;
+    }
 
     function isLowerOrEqual($i){
         return $i <= $this->num;

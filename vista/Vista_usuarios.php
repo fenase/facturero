@@ -17,25 +17,25 @@ class VistaUsuarios{
         echo $this->contenido;
     }
 
-    function Usuarios($proyectos){
+    function Usuarios($usuarios){
         $inicioCiclo    = '<!-- {{inicio.lista}} -->';
         $finCiclo       = '<!-- {{fin.lista}} -->';
         $inicioCicloLEN = strlen($inicioCiclo);
         $finCicloLEN    = strlen($finCiclo);
-        foreach($proyectos as $proyecto){
+        foreach($usuarios as $usuario){
             $inicioCicloPos  = strpos($this->contenido, $inicioCiclo);
             $finCicloPos     = strpos($this->contenido, $finCiclo);
             $textAux         = substr($this->contenido,
                                       $inicioCicloPos + $inicioCicloLEN,
                                       $finCicloPos - $inicioCicloPos - $inicioCicloLEN);
             $textAux         = str_replace('<!-- {{user}} -->',
-                                           $proyecto->getUser(), $textAux);
+                                           $usuario->getUser(), $textAux);
             $textAux         = str_replace('<!-- {{nombre}} -->',
-                                           $proyecto->getNombre(), $textAux);
+                                           $usuario->getNombre(), $textAux);
             $textAux         = str_replace('<!-- {{mail}} -->',
-                                           $proyecto->getMail(), $textAux);
+                                           $usuario->getMail(), $textAux);
             $textAux         = str_replace('<!-- {{ultimoLogin}} -->',
-                                           $proyecto->getUltimoLogin(),
+                                           $usuario->getUltimoLogin(),
                                            $textAux);
             $textAux         = str_replace('<!-- {{accion}} -->',
                                            'PONER ACCION', $textAux);

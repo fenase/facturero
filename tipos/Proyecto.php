@@ -202,7 +202,7 @@ class Proyecto{
      */
     public function sacarParticipante($idIn){
         $this->participantes = array_filter($this->participantes,
-                                                array(new NumericComparisonFilter($idIn), 'isEqual'));
+                                                array(new NumericComparisonFilter($idIn), 'isNotEqual'));
         Usuario::sacarHuecosOrden($this->participantes);
         $this->cantidadParticipantes = count($this->participantes);
     }
