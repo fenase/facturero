@@ -50,6 +50,14 @@ function getClaseVista(){
     }
 }
 
+function idValido($id){
+    $res = TRUE;
+    $res = $res && isset($id);
+    $res = $res && is_numeric($id);
+    $res = $res && (floor($id) == $id);
+    return ( $res && ($res > 0) );
+}
+
 function redirect($url){
     header('location: ' . $url);
     exit();

@@ -2,7 +2,7 @@
 
 $link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
 
-$vista = new VistaUsuarios('./template/usuarios.html');
-$vista->usuarios(Usuario::todosLosUsuarios());
-$vista->mostrar();
-
+$template              = $twig->loadTemplate('usuarios.tpl');
+$variables['usuarios'] = Usuario::todosLosUsuarios();
+$variables['config']   = array('BASEURL' => BASEURL);
+echo $template->render($variables);

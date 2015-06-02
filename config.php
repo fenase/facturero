@@ -35,4 +35,9 @@ foreach($arreglos as $key => $value){
     }
 }
 
+//defino una ultima constante
+if(defined('INDEXURL') && !defined('BASEURL')){
+    define('BASEURL', dirname(INDEXURL));
+}
+
 return $link;

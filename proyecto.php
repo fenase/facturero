@@ -2,11 +2,14 @@
 
 $link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
 
+$variables['config'] = array('BASEURL' => BASEURL);
+
 if(!idValido($_GET['id'])){
     redirect('./proyectos.php');
 }
 
-$vista    = new VistaProyecto('./template/proyecto.html');
+$template = $twig->loadTemplate('proyecto.tpl');
+
 $proyecto = new Proyecto($_GET['id']);
 
 
@@ -15,16 +18,5 @@ if(idValido($_GET['sacarParticipante'])){
     $proyecto->guardar();
     redirect($_SERVER['PHP_SELF'] . '?id=' . $_GET['id']);
 }
-
-
-
-$vista->proyecto($proyecto);
-$vista->mostrar();
-
-function idValido($id){
-    $res = TRUE;
-    $res = $res && isset($id);
-    $res = $res && is_numeric($id);
-    $res = $res && (floor($id) == $id);
-    return ( $res && ($res > 0) );
-}
+$variables['proyecto'] = $proyecto;
+echo $template->render($variables);

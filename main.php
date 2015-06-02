@@ -2,7 +2,7 @@
 
 $link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
 
-$vista = new VistaMain('./template/main.html');
-$vista->preparar();
-$vista->mostrar();
+$template = $twig->loadTemplate('main.tpl');
+$variables = array();
+echo $template->render($variables);
 

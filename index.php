@@ -2,7 +2,8 @@
 
 $link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
 
-
+$template = $twig->loadTemplate('index.tpl');
+$variables = array();
 
 if($_POST['action'] == login){
     $login             = $link->escape_string($_POST['usr']);
@@ -12,9 +13,9 @@ if($_POST['action'] == login){
         $passLimpia    = $link->escape_string($_POST['pass']);
         $passIngresada = $passLimpia . $userIntentaEntrar->getUltimoLoginTimestamp();
         if(!$userIntentaEntrar->getLoginEnabled()){
-            echo 'USUARIO DESHABILITADO';
+            $variables['error'] = 'USUARIO DESHABILITADO';
         }elseif($userIntentaEntrar->getPass() != sha1($passIngresada)){
-            echo 'PASS INCORRECTO';
+            $variables['error'] = 'PASS INCORRECTO';
         }else{
             //GUARDA que no controlo errores
             $_SESSION['user'] = $login;
@@ -24,9 +25,7 @@ if($_POST['action'] == login){
             redirect('./main.php');
         }
     }else{
-        echo 'USUARIO INCORRECTO';
+        $variables['error'] = 'USUARIO INCORRECTO';
     }
 }
-$contenido = file_get_contents('./template/index.html');
-echo $contenido;
-
+echo $template->render($variables);

@@ -21,7 +21,7 @@
     <property name="sonar.language" value="php" />
     <property name="sonar.sources" value="${basedir}" />
     <property name="sonar.binaries" value="${basedir}" />
-	<property name="sonar.exclusions" value="${basedir}/lib/**/*"/>
+	<property name="sonar.exclusions" value="lib/**/*"/>
 
  <!-- Uncomment the following when the tools are in ${basedir}/vendor/bin -->
  <!-- <property name="toolsdir" value="${basedir}/vendor/bin/"/> -->

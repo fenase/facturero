@@ -3,3 +3,4 @@ nbproject/**
 log/
 log/**
 *.tmp
+cache
