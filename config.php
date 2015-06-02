@@ -2,8 +2,8 @@
 
 /* BASE DE DATOS: */
 define('DBHOST', 'localhost');
-define('DBUSER', 'root');
-define('DBPASS', '');
+define('DBUSER', 'facturero');
+define('DBPASS', 'facturero');
 define('DBDB', 'facturero');
 
 $link = new Database(DBHOST, DBUSER, DBPASS, DBDB);
