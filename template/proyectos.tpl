@@ -45,8 +45,7 @@
                 </tr>{% endfor %}
             </table>
         </div>
-        <div>
-            <a href="{{config.BASEURL}}/main.php">Atr&aacute;s</a>
-        </div>
+        <div><a href="{{config.BASEURL}}/main.php">Men&uacute; principal</a></div>
+        <div><a href="{{config.BASEURL}}/logout.php">salir</a></div>
     </body>
 </html>

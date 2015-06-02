@@ -31,7 +31,7 @@
                         {{item.user}}
                     </td>
                     <td>
-                        {{item.nombre}}
+                        <a href="{{config.BASEURL}}/usuario.php?id={{item.id}}">{{item.nombre}}</a>
                     </td>
                     <td>
                         {{item.mail}}
@@ -45,8 +45,7 @@
                 </tr>{% endfor %}
             </table>
         </div>
-        <div>
-            <a href="{{config.BASEURL}}/main.php">Atr&aacute;s</a>
-        </div>
+        <div><a href="{{config.BASEURL}}/main.php">Men&uacute; principal</a></div>
+        <div><a href="{{config.BASEURL}}/logout.php">salir</a></div>
     </body>
 </html>

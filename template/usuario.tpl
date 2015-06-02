@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Vista de proyecto: {{proyecto.nombre}}</title>
+        <title>Vista de usuario: {{usuario.nombre}}</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -10,10 +10,18 @@
             <table>
                 <tr>
                     <td>
-                        Id Proyecto
+                        Id Usuario
                     </td>
                     <td>
-                        {{proyecto.id}}
+                        {{usuario.id}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Login
+                    </td>
+                    <td>
+                        {{usuario.user}}
                     </td>
                 </tr>
                 <tr>
@@ -21,50 +29,34 @@
                         Nombre
                     </td>
                     <td>
-                        {{proyecto.nombre}}
+                        {{usuario.nombre}}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        Frecuencia
+                        &uacute;ltimo Ingreso
                     </td>
                     <td>
-                        {{proyecto.frecuencia}} 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Cantidad de participantes
-                    </td>
-                    <td>
-                        {{proyecto.cantidadParticipantes}}
+                        {{usuario.ultimoLogin}} 
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        comentarios
+                        Correo
                     </td>
                     <td>
-                        {{proyecto.comentarios}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        leyenda
-                    </td>
-                    <td>
-                        {{proyecto.leyenda}}
+                        {{usuario.mail}}
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        participantes
+                        proyectos
                     </td>
                     <td>
                         <ul>
-                            {% for usuario in proyecto.participantes %}
+                            {% for proyecto in proyectosUsuario %}
                             <li>
-                                <a href="{{config.BASEURL}}/usuario.php?id={{usuario.id}}">{{usuario.nombre}}</a>
+                                <a href="{{config.BASEURL}}/proyecto.php?id={{proyecto.id}}">{{proyecto.nombre}}</a>
                             </li>
                             {% endfor %}
                         </ul>
@@ -72,7 +64,7 @@
                 </tr>
             </table>
         </div>
-        <div><a href="{{config.BASEURL}}/proyectos.php">Vista de proyectos</a></div>
+        <div><a href="{{config.BASEURL}}/proyectos.php">Vista de Usuarios</a></div>
         <div><a href="{{config.BASEURL}}/main.php">Men&uacute; principal</a></div>
         <div><a href="{{config.BASEURL}}/logout.php">salir</a></div>
     </body>
