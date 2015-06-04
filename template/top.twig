@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="./template/css/style.css">
+        <link rel="stylesheet" type="text/css" href="./template/menu/styles.css">
     </head>
     <body>
         <div class="topframe">
@@ -12,10 +13,11 @@
             <div class="menu">
                 <div id='cssmenu'>
                     <ul>
-                        <li class='active'><a href="{{ config.BASEURL }}/main.php">Principal</a></li>
-                        <li><a href="{{ config.BASEURL }}/proyectos.php">Vista de Usuarios</a></li>
-                        <li><a href="{{ config.BASEURL }}/proyectos.php">Vista de proyectos</a></li>
-                        <li><a href="{{ config.BASEURL }}/logout.php">salir</a></li>
+                        {% for seccion in secciones %}
+                            {% if seccion.disabled == false %}
+                            <li {% if seccion.active == true %} class='active'{% endif %}><a href="{{ config.BASEURL }}/{{ seccion.pagina }}">{{ seccion.nombre }}</a></li>
+                            {% endif %}
+                        {% endfor %}
                     </ul>
                 </div>        
             </div>

@@ -19,14 +19,23 @@ function endsWith($string, $final){
             );
 }
 
-function get_topmost_script(){
+/**
+ * Devuelve la ruta al archivo principal que se entá ejecutando.
+ * @param boolean $filenameOnly sólo devolver el nombre de archivo y no la ruta completa
+ * @return string archivo en ejecución
+ */
+function get_topmost_script($filenameOnly = FALSE){
     if(defined('DEBUG_BACKTRACE_IGNORE_ARGS')){
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
     }else{
         $backtrace = debug_backtrace();
     }
     $topFrame = array_pop($backtrace);
-    return $topFrame['file'];
+    if(!$filenameOnly){
+        return $topFrame['file'];
+    }else{
+        return basename($topFrame['file']);
+    }
 }
 
 function getClaseVista(){
@@ -50,12 +59,71 @@ function getClaseVista(){
     }
 }
 
+/**
+ * array_search buscando por un campo determinado.
+ * @param type $needle ¿Qué se busca?
+ * @param type $haystack ¿En qué diccionario?
+ * @param type $field ¿Qué campo hay que comparar?
+ * @return int clave del valor encontrado, FALSE en caso de no encontrarse
+ */
+function getIndexByField($needle, $haystack, $field){
+    foreach($haystack as $index => $innerArray){
+        if(isset($innerArray[$field]) && $innerArray[$field] === $needle){
+            return $index;
+        }
+    }
+    return false;
+}
+
 function idValido($id){
     $res = TRUE;
     $res = $res && isset($id);
     $res = $res && is_numeric($id);
     $res = $res && (floor($id) == $id);
     return ( $res && ($res > 0) );
+}
+
+/**
+ * Encuentra la raíz de una página para saber cuál marcar en el menú
+ * @param string $pagina página para buscar su origen
+ * @return nombre de página padre si se encuentra, FALSE si no
+ */
+function obtenerRaiz($pagina){
+    foreach(unserialize(SECCIONES_HIJOS) as $padre => $hijos){
+        if(in_array($pagina, $hijos)){
+            return $padre;
+        }
+    }
+    return FALSE;
+}
+
+/**
+ * Devuelve un array con los elementos del menú superior correspondientes a la página que está viendo el usuario.
+ * @param string $pagina página actual (default: get_topmost_script(TRUE))
+ * @return array Elementos para el menú
+ */
+function obtenerSecciones($pagina = NULL){
+    //obtengo la página abierta (en caso de no proveerse)
+    $pagina = ($pagina === NULL) ? get_topmost_script(TRUE) : $pagina;
+    //obtengo la raíz
+    $raiz = obtenerRaiz($pagina);
+    $pagina = $raiz ? $raiz : $pagina;
+    $secciones = array();
+    foreach(unserialize(SECCIONES_POSIBLES) as $seccion){
+        if($pagina == $seccion['pagina']){
+            $seccion['active'] = TRUE;
+        }
+        $secciones[] = $seccion;
+    }
+    //segunda pasada para deshabilitar secciones
+    foreach(unserialize(SECCIONES_POSIBLES) as $seccion){
+        if($pagina == $seccion['pagina']){
+            foreach($seccion['deshabilita'] as $deshabilitar){
+                $secciones[getIndexByField($deshabilitar, $secciones, 'pagina')]['disabled'] = TRUE;
+            }
+        }
+    }
+    return $secciones;
 }
 
 function redirect($url){

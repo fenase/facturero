@@ -5,7 +5,6 @@ $twigVariables['title'] = 'Administración del Facturero Baufest';
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
 
 $template      = $twig->loadTemplate('index.twig');
-$twigVariables = array();
 
 if($_POST['action'] == login){
     $login             = $link->escape_string($_POST['usr']);
