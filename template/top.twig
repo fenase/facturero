@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./template/css/style.css">
+    </head>
+    <body>
+        <div class="topframe">
+            Bienvenido al sistema de administraci&oacute;n de facturas <span class="myUser">{{ userLogin }}</span>
+            <div class="menu">
+                <div id='cssmenu'>
+                    <ul>
+                        <li class='active'><a href="{{ config.BASEURL }}/main.php">Principal</a></li>
+                        <li><a href="{{ config.BASEURL }}/proyectos.php">Vista de Usuarios</a></li>
+                        <li><a href="{{ config.BASEURL }}/proyectos.php">Vista de proyectos</a></li>
+                        <li><a href="{{ config.BASEURL }}/logout.php">salir</a></li>
+                    </ul>
+                </div>        
+            </div>
+        </div>

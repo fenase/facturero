@@ -39,5 +39,3 @@ foreach($arreglos as $key => $value){
 if(defined('INDEXURL') && !defined('BASEURL')){
     define('BASEURL', dirname(INDEXURL));
 }
-
-return $link;

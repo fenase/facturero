@@ -14,7 +14,7 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'constantes.php');
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'auxiliares.php');
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'funcionesDB.php');
 //config devuelve la conexión a la base de datos
-$link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php');
 
 //tipos de datos
 function __autoload($classname){
@@ -29,14 +29,15 @@ function __autoload($classname){
         require_once($filename['librerias']);
     }elseif(is_file($file = dirname(__FILE__) . '/lib/' . str_replace(array('_',
                         "\0"), array('/', ''), $classname) . '.php')){
-        require $file;
+        //TWIG
+        require_once $file;
     }else{
         throw new Exception("Clase $classname no encontrada");
     }
 }
 
 if(isset($esUnaPruebaEntoncesIgnorarSesiones)){
-    return $link;
+    return;
 }
 
 if(php_sapi_name() != 'cli' && !isset($esUnaPruebaDelProceso)){
@@ -52,11 +53,15 @@ if(php_sapi_name() != 'cli' && !isset($esUnaPruebaDelProceso)){
     }
     //Twig
     $loader = new Twig_Loader_Filesystem(directorySeparators(dirname(__FILE__) . '/template'));
-    global $twig;
     $twig   = new Twig_Environment($loader,
                                    array(
         'cache' => (FACTURERO_DEBUG_MODE) ? FALSE : directorySeparators(dirname(__FILE__) . '/cache'),
     ));
+    $twigVariables['config']    = array('BASEURL' => BASEURL);
+    $twigVariables['userLogin'] = $_SESSION['userNombreReal'];
+    //header de las páginas
+    include_once './top.php';
+    include_once './bottom.php';
 }else{
     //procesoAutomático
     chdir(dirname(__FILE__));
@@ -64,8 +69,5 @@ if(php_sapi_name() != 'cli' && !isset($esUnaPruebaDelProceso)){
 }
 
 
-
-
-return $link;
 
 

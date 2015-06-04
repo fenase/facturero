@@ -1,9 +1,11 @@
 <?php
 
-$link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
+$twigVariables['title'] = 'Administración del Facturero Baufest';
 
-$template = $twig->loadTemplate('index.tpl');
-$variables = array();
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
+
+$template      = $twig->loadTemplate('index.twig');
+$twigVariables = array();
 
 if($_POST['action'] == login){
     $login             = $link->escape_string($_POST['usr']);
@@ -13,19 +15,21 @@ if($_POST['action'] == login){
         $passLimpia    = $link->escape_string($_POST['pass']);
         $passIngresada = $passLimpia . $userIntentaEntrar->getUltimoLoginTimestamp();
         if(!$userIntentaEntrar->getLoginEnabled()){
-            $variables['error'] = 'USUARIO DESHABILITADO';
+            $twigVariables['error'] = 'USUARIO DESHABILITADO';
         }elseif($userIntentaEntrar->getPass() != sha1($passIngresada)){
-            $variables['error'] = 'PASS INCORRECTO';
+            $twigVariables['error'] = 'PASS INCORRECTO';
         }else{
             //GUARDA que no controlo errores
-            $_SESSION['user'] = $login;
+            $_SESSION['user']           = $userIntentaEntrar->getUser();
+            $_SESSION['userNombreReal'] = $userIntentaEntrar->getNombre();
             $userIntentaEntrar->setUltimoLoginTimestamp();
             $userIntentaEntrar->setPass(sha1($passLimpia . $userIntentaEntrar->getUltimoLoginTimestamp()));
             $userIntentaEntrar->guardar();
             redirect('./main.php');
         }
     }else{
-        $variables['error'] = 'USUARIO INCORRECTO';
+        $twigVariables['error'] = 'USUARIO INCORRECTO';
     }
 }
-echo $template->render($variables);
+
+require_once('mainEcho.php');

@@ -1,0 +1,21 @@
+.topframe a:link {
+    text-decoration: none;
+}
+
+.topframe a:visited {
+    text-decoration: none;
+}
+
+.topframe a:hover {
+    text-decoration: underline;
+}
+
+.topframe a:active {
+    text-decoration: underline;
+}
+
+.topframe .myUser{
+    text-decoration: underline;
+    text-decoration-color: red;
+}
+

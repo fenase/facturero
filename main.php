@@ -1,8 +1,10 @@
 <?php
 
-$link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
+$twigVariables['title'] = 'Página principal';
 
-$template = $twig->loadTemplate('main.tpl');
-$variables = array();
-echo $template->render($variables);
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
+
+$template = $twig->loadTemplate('main.twig');
+
+include('mainEcho.php');
 

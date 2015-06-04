@@ -1,18 +1,18 @@
 <?php
 
-$link = require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
 
-$variables['config'] = array('BASEURL' => BASEURL);
 
 if(!idValido($_GET['id'])){
     redirect('./usuarios.php');
 }
 
-$template = $twig->loadTemplate('usuario.tpl');
+$template = $twig->loadTemplate('usuario.twig');
 
 $usuario = new Usuario($_GET['id']);
 
 
-$variables['usuario'] = $usuario;
-$variables['proyectosUsuario'] = $usuario->proyectos();
-echo $template->render($variables);
+$twigVariables['usuario']          = $usuario;
+$twigVariables['proyectosUsuario'] = $usuario->proyectos();
+
+require_once 'mainEcho.php';

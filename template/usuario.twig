@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Vista de usuario: {{usuario.nombre}}</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
         <div>
             <table>
                 <tr>
@@ -13,7 +5,7 @@
                         Id Usuario
                     </td>
                     <td>
-                        {{usuario.id}}
+                        {{ usuario.id }}
                     </td>
                 </tr>
                 <tr>
@@ -21,7 +13,7 @@
                         Login
                     </td>
                     <td>
-                        {{usuario.user}}
+                        {{ usuario.user }}
                     </td>
                 </tr>
                 <tr>
@@ -29,7 +21,7 @@
                         Nombre
                     </td>
                     <td>
-                        {{usuario.nombre}}
+                        {{ usuario.nombre }}
                     </td>
                 </tr>
                 <tr>
@@ -37,7 +29,7 @@
                         &uacute;ltimo Ingreso
                     </td>
                     <td>
-                        {{usuario.ultimoLogin}} 
+                        {{ usuario.ultimoLogin }} 
                     </td>
                 </tr>
                 <tr>
@@ -45,7 +37,7 @@
                         Correo
                     </td>
                     <td>
-                        {{usuario.mail}}
+                        {{ usuario.mail }}
                     </td>
                 </tr>
                 <tr>
@@ -56,7 +48,7 @@
                         <ul>
                             {% for proyecto in proyectosUsuario %}
                             <li>
-                                <a href="{{config.BASEURL}}/proyecto.php?id={{proyecto.id}}">{{proyecto.nombre}}</a>
+                                <a href="{{ config.BASEURL }}/proyecto.php?id={{ proyecto.id }}">{{ proyecto.nombre }}</a>
                             </li>
                             {% endfor %}
                         </ul>
@@ -64,8 +56,6 @@
                 </tr>
             </table>
         </div>
-        <div><a href="{{config.BASEURL}}/proyectos.php">Vista de Usuarios</a></div>
-        <div><a href="{{config.BASEURL}}/main.php">Men&uacute; principal</a></div>
-        <div><a href="{{config.BASEURL}}/logout.php">salir</a></div>
-    </body>
-</html>
+        <div><a href="{{ config.BASEURL }}/proyectos.php">Vista de Usuarios</a></div>
+        <div><a href="{{ config.BASEURL }}/main.php">Men&uacute; principal</a></div>
+        <div><a href="{{ config.BASEURL }}/logout.php">salir</a></div>
