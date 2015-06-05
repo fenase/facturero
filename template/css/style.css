@@ -1,3 +1,8 @@
+#fullPage {
+    width: 90%;
+    margin: 0 auto;
+}
+
 .topframe a:link {
     text-decoration: none;
 }

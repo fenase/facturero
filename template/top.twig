@@ -5,20 +5,20 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="./template/css/style.css">
-        <link rel="stylesheet" type="text/css" href="./template/menu/styles.css">
+        <link rel="stylesheet" type="text/css" href="./template/menu/styles_c.css">
     </head>
     <body>
-        <div class="topframe">
-            Bienvenido al sistema de administraci&oacute;n de facturas <span class="myUser">{{ userLogin }}</span>
-            <div class="menu">
-                <div id='cssmenu'>
-                    <ul>
-                        {% for seccion in secciones %}
-                            {% if seccion.disabled == false %}
-                            <li {% if seccion.active == true %} class='active'{% endif %}><a href="{{ config.BASEURL }}/{{ seccion.pagina }}">{{ seccion.nombre }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                </div>        
+        <div id="fullPage">
+            <div class="topframe">
+                <div class="menu">
+                    <div id='cssmenu'>
+                        <ul>
+                            {% for seccion in secciones %}
+                                {% if seccion.disabled == false %}
+                                <li {% if seccion.active == true %} class='active'{% endif %}><a href="{{ config.BASEURL }}/{{ seccion.pagina }}">{{ seccion.nombre }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>        
+                </div>
             </div>
-        </div>
