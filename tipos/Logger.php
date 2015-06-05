@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Clase de log
- *
+ * @package Logger
  */
 define('ERROR_LEVEL_CRITICAL', 1);
 define('ERROR_LEVEL_ERROR', 2);
@@ -10,6 +9,10 @@ define('ERROR_LEVEL_WARNING', 4);
 define('ERROR_LEVEL_INFO', 8);
 define('ERROR_LEVEL_ALL', 15);
 
+/**
+ * Clase de log
+ * @package Logger
+ */
 class Logger{
 
     private $baseLevel;

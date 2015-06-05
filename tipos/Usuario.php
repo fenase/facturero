@@ -2,7 +2,7 @@
 
 /**
  * Clase usuario
- *
+ * @package Tipos de datos
  * @author fedseckel
  */
 class Usuario{

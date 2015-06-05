@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * @package Funciones Auxiliares
+ * @author fedseckel
+ */
 function directorySeparators($dir){
     $dir  = str_replace('/', DIRECTORY_SEPARATOR, $dir);
     $dir  = str_replace("\\", DIRECTORY_SEPARATOR, $dir);
-    $dir2 = $dir;
+    $dir2 = $dir;/**
+ * @package Funciones Auxiliares
+ * @author fedseckel
+ */
     while($dir != ($dir2 = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR,
                                        DIRECTORY_SEPARATOR, $dir))){
         $dir = $dir2;
@@ -11,6 +18,10 @@ function directorySeparators($dir){
     return $dir;
 }
 
+/**
+ * @package Funciones Auxiliares
+ * @author fedseckel
+ */
 function endsWith($string, $final){
     return ($final === '') ||
             (
@@ -23,6 +34,7 @@ function endsWith($string, $final){
  * Devuelve la ruta al archivo principal que se entá ejecutando.
  * @param boolean $filenameOnly sólo devolver el nombre de archivo y no la ruta completa
  * @return string archivo en ejecución
+ * @package Funciones Auxiliares
  */
 function get_topmost_script($filenameOnly = FALSE){
     if(defined('DEBUG_BACKTRACE_IGNORE_ARGS')){
@@ -65,6 +77,7 @@ function getClaseVista(){
  * @param type $haystack ¿En qué diccionario?
  * @param type $field ¿Qué campo hay que comparar?
  * @return int clave del valor encontrado, FALSE en caso de no encontrarse
+ * @package Funciones Auxiliares
  */
 function getIndexByField($needle, $haystack, $field){
     foreach($haystack as $index => $innerArray){
@@ -87,6 +100,7 @@ function idValido($id){
  * Encuentra la raíz de una página para saber cuál marcar en el menú
  * @param string $pagina página para buscar su origen
  * @return nombre de página padre si se encuentra, FALSE si no
+ * @package Funciones Auxiliares
  */
 function obtenerRaiz($pagina){
     foreach(unserialize(SECCIONES_HIJOS) as $padre => $hijos){
@@ -101,6 +115,7 @@ function obtenerRaiz($pagina){
  * Devuelve un array con los elementos del menú superior correspondientes a la página que está viendo el usuario.
  * @param string $pagina página actual (default: get_topmost_script(TRUE))
  * @return array Elementos para el menú
+ * @package Funciones Auxiliares
  */
 function obtenerSecciones($pagina = NULL){
     //obtengo la página abierta (en caso de no proveerse)
@@ -141,6 +156,7 @@ function startsWith($string, $comienzo){
  * @param array(string) $files Array de rutas a archivos
  * @return array(string) unión de $files con el archivo de salida (nuevo arreglo de archivos)
  * @throws Exception en caso de no poder abrir archivos
+ * @package Funciones Auxiliares
  */
 function unirArchivos($archivoDestino, $files){
     $out = fopen($archivoDestino, 'w');
@@ -163,6 +179,10 @@ function unirArchivos($archivoDestino, $files){
     return $res;
 }
 
+/**
+ * @package Filtros
+ * @author fedseckel
+ */
 class NumericComparisonFilter{
 
     private $num;

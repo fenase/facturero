@@ -2,7 +2,7 @@
 
 /**
  * Clase proyecto
- * 
+ * @package Tipos de datos
  * @author FedSeckel
  */
 class Proyecto{
