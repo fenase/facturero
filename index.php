@@ -2,7 +2,7 @@
 
 $twigVariables['title'] = 'Administración del Facturero Baufest';
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'prepend.php');
 
 $template      = $twig->loadTemplate('index.twig');
 
@@ -31,4 +31,4 @@ if($_POST['action'] == login){
     }
 }
 
-require_once('mainEcho.php');
+require_once('private/mainEcho.php');

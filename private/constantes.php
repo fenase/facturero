@@ -6,6 +6,8 @@ define('USER_MANUAL_DEFINE', 2);
 
 define('FACTURERO_DEBUG_MODE', TRUE);
 
+define('BASEDIR', dirname(dirname(__FILE__)));
+
 define('SECCIONES_POSIBLES',
        serialize(array(
             array(

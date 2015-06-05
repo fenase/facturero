@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'prepend.php');
 
 $_SESSION = array();
 if(ini_get("session.use_cookies")){

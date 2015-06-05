@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'prepend.php');
 
 
 if(!idValido($_GET['id'])){
@@ -15,4 +15,4 @@ $usuario = new Usuario($_GET['id']);
 $twigVariables['usuario']          = $usuario;
 $twigVariables['proyectosUsuario'] = $usuario->proyectos();
 
-require_once 'mainEcho.php';
+require_once('private/mainEcho.php');

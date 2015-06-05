@@ -2,9 +2,9 @@
 
 $twigVariables['title'] = 'Página principal';
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'prepend.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'prepend.php');
 
 $template = $twig->loadTemplate('main.twig');
 
-include('mainEcho.php');
+require_once('private/mainEcho.php');
 
