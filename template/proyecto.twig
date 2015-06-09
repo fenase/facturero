@@ -48,19 +48,23 @@
                         {{ proyecto.leyenda }}
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        participantes
-                    </td>
-                    <td>
-                        <ul>
-                            {% for usuario in proyecto.participantes %}
-                            <li>
-                                <a href="{{ config.BASEURL }}/usuario.php?id={{ usuario.id }}">{{ usuario.nombre }}</a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
             </table>
+            <div style="participantes">
+                <h3> Participantes:</h3>
+                <div id="lista">
+                    {% for usuario in proyecto.participantes %}
+                        <div class="elemento" draggable="true"><div class="id" style="display: none;">{{ usuario.id }}</div>
+                        <div name="nombre">{{ usuario.nombre }}</div>
+                    </div>
+                    {% endfor %}
+                    <!-- zona auxiliar -->
+                    <form id="form" method="post">
+                        <input name="listSortOrder" type="hidden" />
+                        <input name="accion" type="hidden" />
+                    </form>
+                    <!-- fin zona auxiliar -->
+                </div>
+            </div>
         </div>
+
+        <button onclick="guardarLista();">guardar</button>

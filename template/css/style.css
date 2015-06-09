@@ -3,24 +3,27 @@
     margin: 0 auto;
 }
 
-.topframe a:link {
-    text-decoration: none;
+[draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
 }
 
-.topframe a:visited {
-    text-decoration: none;
+.elemento {
+    padding: 2px;
+}
+.elemento:hover {
+    padding: 0;
+    border: 2px dashed #000;
+}
+.elemento.over {
+    padding: 0;
+    border: 2px dashed #000;
 }
 
-.topframe a:hover {
-    text-decoration: underline;
-}
 
-.topframe a:active {
-    text-decoration: underline;
-}
-
-.topframe .myUser{
-    text-decoration: underline;
-    text-decoration-color: red;
-}
 

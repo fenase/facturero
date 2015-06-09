@@ -42,7 +42,7 @@ class Proyecto{
 
             $this->participantes = $this->participantesDelProyecto();
         }else{
-            //usuario nuevo
+            //proyecto nuevo
             $this->id                         = FALSE;
             $this->nombre                     = $datos['nombre'];
             $this->frecuencia                 = $datos['frecuencia'];
@@ -96,7 +96,9 @@ class Proyecto{
     }
 
     public function setParticipantes($participantesIN){
+        Usuario::sacarHuecosOrden($participantesIN, TRUE);
         $this->participantes = $participantesIN;
+        $this->cantidadParticipantes = count($this->participantes);
     }
 
     public function setSiguienteParticipanteIndex($i){
@@ -121,7 +123,8 @@ class Proyecto{
         $query = "SELECT u.idUsuarios, up.orden, u.user, u.pass, u.ultimoLogin, u.loginenabled, u.verificacion, u.mail, u.nombre "
                 . "FROM usuariosenproyecto up "
                 . "JOIN usuarios u ON up.idUsuarios = u.idUsuarios "
-                . "WHERE up.idproyectos = " . $this->id;
+                . "WHERE up.idproyectos = " . $this->id . " "
+                . "ORDER BY up.orden";
         $res   = self::$db->query($query);
         $datos = array();
         while(($row   = $res->fetch_assoc())){
@@ -149,21 +152,21 @@ class Proyecto{
             $query = "INSERT INTO proyectos "
                     . "(nombre, frecuencia, cantidadParticipantes, comentarios, leyenda) VALUE "
                     . "("
-                    . $this->nombre . ", "
-                    . $this->frecuencia . ", "
-                    . $this->cantidadParticipantes . ", "
-                    . $this->comentarios . ", "
-                    . $this->leyenda
-                    . ")";
+                    . "'" . $this->nombre . "', "
+                    . "'" . $this->frecuencia . "', "
+                    . "'" . $this->cantidadParticipantes . "', "
+                    . "'" . $this->comentarios . "', "
+                    . "'" . $this->leyenda
+                    . "'" . ")";
         }else{
             //actualizar
             $query = "UPDATE proyectos SET "
-                    . "nombre = " . $this->nombre
-                    . "frecuencia = " . $this->frecuencia
-                    . "cantidadParticipantes = " . $this->cantidadParticipantes
-                    . "comentarios = " . $this->comentarios
-                    . "leyenda = " . $this->leyenda
-                    . "WHERE id = " . $this->id;
+                    . "nombre = '" . $this->nombre . "', "
+                    . "frecuencia = '" . $this->frecuencia . "', "
+                    . "cantidadParticipantes = '" . $this->cantidadParticipantes . "', "
+                    . "comentarios = '" . $this->comentarios . "', "
+                    . "leyenda = '" . $this->leyenda . "' "
+                    . "WHERE idproyectos = '" . $this->id . "'";
         }
         self::$db->query($query);
         if($this->id === FALSE){
@@ -176,9 +179,11 @@ class Proyecto{
         //borro todos los usuarios
         $query = "DELETE FROM usuariosenproyecto WHERE idproyectos = " . $this->id;
         self::$db->query($query);
-        $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . $this->listaQueryValuesUsuariosEnProyecto();
-        //vuelvo a insertar la lista.
-        self::$db->query($query);
+        if($this->cantidadParticipantes){
+            $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . $this->listaQueryValuesUsuariosEnProyecto();
+            //vuelvo a insertar la lista.
+            self::$db->query($query);
+        }
     }
 
     /**
@@ -229,12 +234,13 @@ class Proyecto{
         $res = '';
         do{
             $res .= '(';
-            $res .= $this->participantes[$i]->id . ', ';
+            $res .= $this->participantes[$i]->getId() . ', ';
             $res .= $this->id . ', ';
-            $res .= $this->participantes[$i]->orden;
+            $res .= $this->participantes[$i]->getOrden();
             $res .= ')';
             $i++;
-        }while($i < count($this->cantidadParticipantes) && $res .= ', ');
+        }while($i < $this->cantidadParticipantes && $res .= ', ');
+        return $res;
     }
 
 }

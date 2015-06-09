@@ -167,10 +167,14 @@ class Usuario{
      * @param array $conjunto conjunto de datos con los que crear usuarios
      * @return array(usuario)
      */
-    public static function crearUsuarios($conjunto){
+    public static function crearUsuarios($conjunto, $tipoID = USER_MANUAL_DEFINE){
         $usuarios = array();
-        foreach($conjunto as $datos){
-            $usuarios[] = new Usuario(NULL, USER_MANUAL_DEFINE, $datos);
+        foreach($conjunto as $dato){
+            if($tipoID == USER_MANUAL_DEFINE){
+                $usuarios[] = new Usuario(NULL, USER_MANUAL_DEFINE, $dato);
+            }else{
+                $usuarios[] = new Usuario($dato, $tipoID);
+            }
         }
         return $usuarios;
     }
@@ -211,10 +215,19 @@ class Usuario{
         }
     }
 
-    public static function sacarHuecosOrden(&$list){
+    public static function sacarHuecosOrden(&$list, $sorted = FALSE){
         $ultimoOrden = 1;
-        //me aseguro que esté ordenado
-        usort($list, array('usuario', 'compararOrden'));
+        if(!$sorted){
+            //me aseguro que esté ordenado
+            usort($list, array('usuario', 'compararOrden'));
+        }else{
+            //recrear llaves del diccionario
+            $tempArrr = $list;
+            unset($list);
+            foreach($tempArrr as $value){
+                $list[] = $value;
+            }
+        }
         while($ultimoOrden <= count($list)){
             $list[$ultimoOrden - 1]->setOrden($ultimoOrden);
             $ultimoOrden++;

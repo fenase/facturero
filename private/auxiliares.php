@@ -8,9 +8,9 @@ function directorySeparators($dir){
     $dir  = str_replace('/', DIRECTORY_SEPARATOR, $dir);
     $dir  = str_replace("\\", DIRECTORY_SEPARATOR, $dir);
     $dir2 = $dir;/**
- * @package Funciones Auxiliares
- * @author fedseckel
- */
+     * @package Funciones Auxiliares
+     * @author fedseckel
+     */
     while($dir != ($dir2 = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR,
                                        DIRECTORY_SEPARATOR, $dir))){
         $dir = $dir2;
@@ -28,6 +28,10 @@ function endsWith($string, $final){
             (($posMax = strlen($string) - strlen($final)) >= 0) &&
             (strpos($string, $final, $posMax) !== FALSE)
             );
+}
+
+function filtrarVacios($a){
+    return array_filter($a, 'not_empty_string');
 }
 
 /**
@@ -97,6 +101,16 @@ function idValido($id){
 }
 
 /**
+ * Devuelve true si $s no es el string vacio. False si es vacio.
+ * True en otros tipos de datos.
+ * @param string $s
+ * @return boolean no es string vacio
+ */
+function not_empty_string($s){
+    return $s !== "";
+}
+
+/**
  * Encuentra la raíz de una página para saber cuál marcar en el menú
  * @param string $pagina página para buscar su origen
  * @return nombre de página padre si se encuentra, FALSE si no
@@ -119,10 +133,10 @@ function obtenerRaiz($pagina){
  */
 function obtenerSecciones($pagina = NULL){
     //obtengo la página abierta (en caso de no proveerse)
-    $pagina = ($pagina === NULL) ? get_topmost_script(TRUE) : $pagina;
+    $pagina    = ($pagina === NULL) ? get_topmost_script(TRUE) : $pagina;
     //obtengo la raíz
-    $raiz = obtenerRaiz($pagina);
-    $pagina = $raiz ? $raiz : $pagina;
+    $raiz      = obtenerRaiz($pagina);
+    $pagina    = $raiz ? $raiz : $pagina;
     $secciones = array();
     foreach(unserialize(SECCIONES_POSIBLES) as $seccion){
         if($pagina == $seccion['pagina']){
@@ -202,7 +216,7 @@ class NumericComparisonFilter{
     function isEqual($i){
         return $i == $this->num;
     }
-    
+
     function isNotEqual($i){
         return $i != $this->num;
     }

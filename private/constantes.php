@@ -8,6 +8,8 @@ define('FACTURERO_DEBUG_MODE', TRUE);
 
 define('BASEDIR', dirname(dirname(__FILE__)));
 
+define('ACC_GUARDAR', 'guardar');
+
 define('SECCIONES_POSIBLES',
        serialize(array(
             array(

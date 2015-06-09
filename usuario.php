@@ -14,5 +14,6 @@ $usuario = new Usuario($_GET['id']);
 
 $twigVariables['usuario']          = $usuario;
 $twigVariables['proyectosUsuario'] = $usuario->proyectos();
+$twigVariables['title']            = $usuario->getNombre();
 
 require_once('private/mainEcho.php');

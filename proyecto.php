@@ -10,6 +10,12 @@ $template = $twig->loadTemplate('proyecto.twig');
 
 $proyecto = new Proyecto($_GET['id']);
 
+if($_POST['accion'] == ACC_GUARDAR){
+    $idsParticipantes = filtrarVacios(explode('|', $_POST['listSortOrder']));
+    $proyecto->setParticipantes(Usuario::crearUsuarios($idsParticipantes, USER_SEARCH_TIPE_ID));
+    $proyecto->guardar();
+}
+
 
 if(idValido($_GET['sacarParticipante'])){
     $proyecto->sacarParticipante($_GET['sacarParticipante']);
@@ -17,6 +23,6 @@ if(idValido($_GET['sacarParticipante'])){
     redirect($_SERVER['PHP_SELF'] . '?id=' . $_GET['id']);
 }
 $twigVariables['proyecto'] = $proyecto;
-$twigVariables['title']    = 'Vista de proyecto: ' . $proyecto;
+$twigVariables['title']    = 'Vista de proyecto: ' . $proyecto->getNombre();
 
 require_once('private/mainEcho.php');
