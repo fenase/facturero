@@ -30,6 +30,11 @@ function endsWith($string, $final){
             );
 }
 
+/**
+ * Elimina de un array los strings vacios
+ * @param array(string) $a
+ * @return array(string)
+ */
 function filtrarVacios($a){
     return array_filter($a, 'not_empty_string');
 }
@@ -54,27 +59,6 @@ function get_topmost_script($filenameOnly = FALSE){
     }
 }
 
-function getClaseVista(){
-    //convierto separaciones de ruta para facilitar trabajo
-    $topmost                         = explode(DIRECTORY_SEPARATOR,
-                                                    str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, get_topmost_script()));
-    //separo elementos de la ruta
-    $topmost[count($topmost) - 1]    = explode('.', $topmost[count($topmost) - 1]);
-    //modifico el nombre del archivo
-    $topmost[count($topmost) - 1][0] = 'vista_' . $topmost[count($topmost) - 1][0];
-    //revierto moviendo
-    $topmost[count($topmost)]        = implode('.', $topmost[count($topmost) - 1]);
-    //agrego carpeta de vistas. -2 porque el arreglo creció
-    $topmost[count($topmost) - 2]    = 'vista';
-    //revierto
-    $filename                        = implode(DIRECTORY_SEPARATOR, $topmost);
-    if(file_exists($filename)){
-        return $filename;
-    }else{
-        return FALSE;
-    }
-}
-
 /**
  * array_search buscando por un campo determinado.
  * @param type $needle ¿Qué se busca?
@@ -92,6 +76,11 @@ function getIndexByField($needle, $haystack, $field){
     return false;
 }
 
+/**
+ * Verifica la probabilidad de que un valor sea una identificación
+ * @param mixed $id
+ * @return boolean
+ */
 function idValido($id){
     $res = TRUE;
     $res = $res && isset($id);
@@ -155,11 +144,21 @@ function obtenerSecciones($pagina = NULL){
     return $secciones;
 }
 
+/**
+ * redirige el navegador al destino
+ * @param string $url destino
+ */
 function redirect($url){
     header('location: ' . $url);
     exit();
 }
 
+/**
+ * Verifica que el $string comience con $comienzo
+ * @param string $string
+ * @param string $comienzo
+ * @return boolean
+ */
 function startsWith($string, $comienzo){
     return ($comienzo === '') || (strpos($string, $comienzo) === 0);
 }
@@ -194,6 +193,9 @@ function unirArchivos($archivoDestino, $files){
 }
 
 /**
+ * Clase de comparaciones numéricas.
+ * Construir la clase con el primer valor a comparar.
+ * Llamar las funciones pasando el segundo como parámetro.
  * @package Filtros
  * @author fedseckel
  */

@@ -72,6 +72,10 @@ class Database{
         }
     }
 
+    /**
+     * Verifica que la conexión esté abierta
+     * @return boolean
+     */
     function ping(){
         return self::$links[$this->thisLink]->ping();
     }

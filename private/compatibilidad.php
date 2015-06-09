@@ -7,6 +7,12 @@
 
 if(!function_exists('spl_object_hash')){
 
+    /**
+     * Devuelve el id del hash del objeto dado
+     * http://php.net/manual/es/function.spl-object-hash.php
+     * @param type $object
+     * @return type Un string que es único para cada objeto que existe actualmente y que siempre es el mismo para cada objeto
+     */
     function spl_object_hash($object){
         if(is_object($object)){
             ob_start();

@@ -22,9 +22,7 @@ if(php_sapi_name() != 'cli' && !isset($esUnaPruebaDelProceso)){
                                                            directorySeparators('facturero\index.php'))){
         header('location: ' . INDEXURL);
     }
-    if(($claseVista = getClaseVista())){
-        require_once($claseVista);
-    }
+
     //Twig
     $loader = new Twig_Loader_Filesystem(directorySeparators(BASEDIR . '/template'));
     $twig   = new Twig_Environment($loader,

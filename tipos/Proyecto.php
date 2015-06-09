@@ -17,6 +17,13 @@ class Proyecto{
     private $leyenda;
     private static $db;
 
+    /**
+     * Constructos de la clase. Si se reciben datos en $datos se crea el proyecto usando los mismos.
+     * Caso contrario, se crea el objeto con el resultado de buscar el $id en la base de datos
+     * @param int $id
+     * @param array(mixed) $datos
+     * @throws Exception en caso de no encontrar id válida
+     */
     function __construct($id, $datos = NULL){
         if(!self::$db || !self::$db->ping()){
             self::$db = new Database();
@@ -175,6 +182,9 @@ class Proyecto{
         $this->guardarParticipantes();
     }
 
+    /**
+     * auxiliar de guardar. Se encarga de almecenar o actualizar los participantes del proyecto.
+     */
     private function guardarParticipantes(){
         //borro todos los usuarios
         $query = "DELETE FROM usuariosenproyecto WHERE idproyectos = " . $this->id;
@@ -229,6 +239,10 @@ class Proyecto{
         return $proyectos;
     }
 
+    /**
+     * Auxiliar de guardarParticipantes. Crea el string con los valores para ingresar en la query de almacenamiento de valores.
+     * @return string
+     */
     private function listaQueryValuesUsuariosEnProyecto(){
         $i   = 0;
         $res = '';

@@ -19,6 +19,16 @@ class Usuario{
     private $orden;
     static private $db;
 
+    /**
+     * Constructor de la clase
+     * Si $tipoID = USER_SEARCH_TIPE_ID, crea el objeto buscando en la base de datos la $identificacion en el campo ID del usuario
+     * Si $tipoID = USER_SEARCH_TIPE_USER, crea el objeto buscando en la base de datos la $identificacion en el campo username del usuario
+     * Si $tipoID = USER_MANUAL_DEFINE, crea el objeto de acuerdo a lo definido en $datos
+     * @param mixed $identificacion
+     * @param int $tipoID
+     * @param array(mixed) $datos
+     * @throws Exception
+     */
     function __construct($identificacion, $tipoID = USER_SEARCH_TIPE_ID,
                          $datos = NULL){
         if(!self::$db || !self::$db->ping()){
@@ -163,8 +173,9 @@ class Usuario{
     //</editor-fold>Getters and Setters
 
     /**
-     * Crea masivamente objeto usuario desde usuarios obtenidos desde la base de datos
+     * Crea masivamente objeto usuario desde usuarios obtenidos desde la base de datos o desde los datos. Ver más info en el contructor
      * @param array $conjunto conjunto de datos con los que crear usuarios
+     * @param int $tipoID igual que en el constructor de la clase
      * @return array(usuario)
      */
     public static function crearUsuarios($conjunto, $tipoID = USER_MANUAL_DEFINE){
@@ -215,6 +226,11 @@ class Usuario{
         }
     }
 
+    /**
+     * Ordena los usuarios por su orden y aplana los valores de orden al volverlos consecutivos comenzando desde 1
+     * @param array(usuario) $list
+     * @param boolean $sorted está ordenada la lista. Si ya lo está, no se vuelve a ordenar
+     */
     public static function sacarHuecosOrden(&$list, $sorted = FALSE){
         $ultimoOrden = 1;
         if(!$sorted){
@@ -234,6 +250,12 @@ class Usuario{
         }
     }
 
+    /**
+     * Compara 2 usuarios teniendo en cuenta su campo orden
+     * @param usuario $a
+     * @param usuario $b
+     * @return int 0 si son iguales; -1 si $a<$b, 1 en caso contrario
+     */
     public static function compararOrden($a, $b){
         return ( ($a->getOrden() == $b->getOrden()) ? 0 :
                         (($a->getOrden() < $b->getOrden()) ? -1 : 1) );

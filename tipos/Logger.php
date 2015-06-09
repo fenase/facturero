@@ -20,6 +20,15 @@ class Logger{
     private $filename;
     private $noPuedoAbrirArchivo;
 
+    /**
+     * Constructor de la clase.
+     * Crea el archivo de log del día si no existe.
+     * Además, une y comprime los archivos de log del mes anterior.
+     * @param int $baseLevel qué niveles debe loguear, con forma de máscara: críticos: 1; errores: 2; advertencias: 4
+     * información: 8. Si sólo se desean los errores críticos y las advertencias, por ejemplo, se deberá introducir un 3.
+     * Se definieron constantes para mayor comodidad: ERROR_LEVEL_CRITICAL, ERROR_LEVEL_ERROR, ERROR_LEVEL_WARNING, ERROR_LEVEL_INFO, ERROR_LEVEL_ALL
+     * 
+     */
     function __construct($baseLevel = ERROR_LEVEL_ALL){
         $this->filename  = directorySeparators(dirname(dirname(__FILE__)) . '/log/') . date('Ymd') . '.txt';
         $this->baseLevel = $baseLevel;
@@ -27,6 +36,9 @@ class Logger{
         $this->rotar();
     }
 
+    /**
+     * destructor de clase: cierra el archivo.
+     */
     function __destruct(){
         if(self::$handler){
             fclose(self::$handler);
@@ -34,6 +46,12 @@ class Logger{
         }
     }
 
+    /**
+     * Guarda en el archivo de log del día el mensaje declarado en $mensaje con el nivel $level, 
+     * siempre y cuando el nivel esté permitido al momento de crear el objeto de log.
+     * @param string $mensaje
+     * @param int $level
+     */
     function log($mensaje, $level = ERROR_LEVEL_INFO){
         if(0 != ($level & $this->baseLevel)){
             //obtengo fecha actual
@@ -54,6 +72,11 @@ class Logger{
         }
     }
 
+    /**
+     * Abre el archivo de log para su escritura.
+     * Si no existe, lo crea.
+     * Si no existe el directorio, lo crea recursivamente.
+     */
     private function abrir(){
         $dirname = dirname($this->filename);
         if(!is_dir($dirname)){
@@ -70,6 +93,11 @@ class Logger{
         }
     }
 
+    /**
+     * Obtiene el texto formateado correspondiente al nivel de error ingresado para marcar los mensajes en el archivo de acuerdo a su nivel.
+     * @param in $level nivel de error
+     * @return string texto
+     */
     private function getNivel($level){
         //los espacios son importantes
         switch($level){
@@ -93,7 +121,7 @@ class Logger{
     }
 
     /**
-     * Comprime los registros del mes pasado
+     * Une y comprime los registros del mes pasado
      */
     private function rotar(){
         //obtengo patrones
@@ -113,6 +141,14 @@ class Logger{
         }
     }
 
+    /**
+     * Parte de rotar. Une y comprime los archivos pasados por parámetro
+     * Agrega a la lista de archivos el archivo descomprimido resultante de la unión.
+     * @param (ref)array(string) $files
+     * @param string $archivoDestino
+     * @return boolean
+     * @throws Exception
+     */
     private function rotarComprimir(&$files, $archivoDestino){
         try{
             $files   = unirArchivos($archivoDestino, $files);
@@ -130,6 +166,10 @@ class Logger{
         return $exito;
     }
 
+    /**
+     * Elimina todos los archivos de la lista
+     * @param array(string) $files
+     */
     private function rotarEliminarArchivos($files){
         foreach($files as $file){
             if(!@unlink($file)){
