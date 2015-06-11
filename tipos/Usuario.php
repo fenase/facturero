@@ -8,9 +8,9 @@
 class Usuario{
 
     /** @var int identificación del usuario */
-    private $id;
+    protected $id;
     /** @var string username */
-    private $user;
+    protected $user;
     /** @var string hash de la contraseña del usuario */
     private $pass;
     /** @var string cuándo ingresó el usuario por última vez */
@@ -305,5 +305,5 @@ class Usuario{
         $res->free();
         return $usuarios;
     }
-
+    
 }

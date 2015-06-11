@@ -5,4 +5,6 @@ function guardarLista(){
     form.submit();
 }
 
-
+function proyectoEliminarParticipante(id){
+    window.location.href = window.location.href + '&sacarParticipante=' + id;
+}

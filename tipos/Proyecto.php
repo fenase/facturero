@@ -226,7 +226,7 @@ class Proyecto{
      */
     public function sacarParticipante($idIn){
         $this->participantes = array_filter($this->participantes,
-                                                array(new NumericComparisonFilter($idIn), 'isNotEqual'));
+                                                array(new DummyUsuario($idIn), 'hasIDNotEqual'));
         Usuario::sacarHuecosOrden($this->participantes);
         $this->cantidadParticipantes = count($this->participantes);
     }

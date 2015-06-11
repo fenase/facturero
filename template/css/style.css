@@ -34,3 +34,8 @@
     left: 20em
 }
 
+.iconIMG {
+    height: 16px;
+    pointer-events: none;
+}
+
