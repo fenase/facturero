@@ -7,21 +7,30 @@
  */
 class Proyecto{
 
+    /** @var int identificación del proyecto */
     private $id;
+    /** @var string nombre fantasía del proyecto */
     private $nombre;
+    /** @var mixed frecuencia (cada cuanto se debe activar) el proyecto */
     private $frecuencia;
+    /** @var unsigned int cuántos participantes tiene el proyecto */
     private $cantidadParticipantes;
+    /** @var Usuario[] participantes del proyecto */
     private $participantes;
+    /** @var int orden del siguiente participante */
     private $siguienteParticipanteIndex;
+    /** var string comentarios */
     private $comentarios;
+    /** var string texto libre. Breve descripción del proyecto */
     private $leyenda;
+    /** @var mysqli conexión a la base de datos */
     private static $db;
 
     /**
      * Constructos de la clase. Si se reciben datos en $datos se crea el proyecto usando los mismos.
      * Caso contrario, se crea el objeto con el resultado de buscar el $id en la base de datos
      * @param int $id
-     * @param array(mixed) $datos
+     * @param mixed[] $datos
      * @throws Exception en caso de no encontrar id válida
      */
     function __construct($id, $datos = NULL){
@@ -124,7 +133,7 @@ class Proyecto{
 
     /**
      * Crea los usuarios participantes del priyecto actual
-     * @return array(usuario)
+     * @return Usuario[]
      */
     private function participantesDelProyecto(){
         $query = "SELECT u.idUsuarios, up.orden, u.user, u.pass, u.ultimoLogin, u.loginenabled, u.verificacion, u.mail, u.nombre "
@@ -224,7 +233,7 @@ class Proyecto{
 
     /**
      * Carga todos los proyectos 
-     * @return Array(proyecto)
+     * @return Proyecto[]
      */
     public static function todosLosProyectos(){
         //nueva db por ser static

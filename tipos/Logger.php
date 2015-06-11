@@ -3,21 +3,30 @@
 /**
  * @package Logger
  */
+
+/** int 1 */
 define('ERROR_LEVEL_CRITICAL', 1);
+/** int 2 */
 define('ERROR_LEVEL_ERROR', 2);
+/** int 4 */
 define('ERROR_LEVEL_WARNING', 4);
+/** int 8 */
 define('ERROR_LEVEL_INFO', 8);
+/** int 15 (1|2|4|8) Activa todos los errores */
 define('ERROR_LEVEL_ALL', 15);
 
 /**
  * Clase de log
- * @package Logger
  */
 class Logger{
 
+    /** @var int Descriptionint nivel de log deseado en forma de máscara. */
     private $baseLevel;
+    /** @var resource puntero al archivo de log */
     private static $handler;
+    /** @var string nombre del archivo de log */
     private $filename;
+    /** @var boolean TRUE si no se pudo abrir el archivo */
     private $noPuedoAbrirArchivo;
 
     /**

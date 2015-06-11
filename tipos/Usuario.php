@@ -7,16 +7,25 @@
  */
 class Usuario{
 
+    /** @var int identificación del usuario */
     private $id;
+    /** @var string username */
     private $user;
+    /** @var string hash de la contraseña del usuario */
     private $pass;
+    /** @var string cuándo ingresó el usuario por última vez */
     private $ultimoLogin;
+    /** @var mixed usuario habilitado? */
     private $loginEnabled;
+    /** @var mixed usuario verificado? */
     private $verificacion;
+    /** @var string dirección de mail del usuario */
     private $mail;
+    /** @var string nombre de la persona representada por el usuario */
     private $nombre;
-    //Orden sólo tiene sentido si el usuario pertenece a un proyecto
+    /** @var int Orden (sólo tiene sentido si el usuario pertenece a un proyecto) */
     private $orden;
+    /** @var mysqli conexión a la base de datos */
     static private $db;
 
     /**

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+  <parser>
+    <target>docs</target>
+  </parser>
+  <transformer>
+    <target>docs</target>
+  </transformer>
+  <files>
+    <directory>.</directory>
+	<ignore>lib/*</ignore>
+  </files>
+  <title>Facturero</title>
+    <transformations>
+        <template name="clean" />
+    </transformations>
+</phpdoc>
