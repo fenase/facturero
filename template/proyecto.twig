@@ -54,7 +54,8 @@
                 <div id="lista">
                     {% for usuario in proyecto.participantes %}
                         <div class="elemento" draggable="true"><div class="id" style="display: none;">{{ usuario.id }}</div>
-                        <div name="nombre">{{ usuario.nombre }}</div>
+                        <div name="nombre" >{{ usuario.nombre }}</div>
+                        <div class="iconosLista"><object height="16px" data="template/icon/delete.svg" type="image/svg+xml"><img src="template/icon/delete.png" /></object></div>
                     </div>
                     {% endfor %}
                     <!-- zona auxiliar -->

@@ -25,5 +25,12 @@
     border: 2px dashed #000;
 }
 
+.elemento * {
+    display: inline-block;
+}
 
+.elemento > .iconosLista {
+    position: absolute;
+    left: 20em
+}
 
