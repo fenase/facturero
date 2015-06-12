@@ -14,7 +14,7 @@ window.onload = function () {
             e.preventDefault(); // Necessary. Allows us to drop.
         }
         e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
-        
+
         this.classList.add('over');
         return false;
     }

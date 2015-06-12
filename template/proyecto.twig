@@ -50,7 +50,10 @@
                 </tr>
             </table>
             <div style="participantes">
-                <h3> Participantes:</h3>
+                <h3><a href="javascript:proyectoAgregarParticipante()">
+                            <object class="iconIMG" data="template/icon/add.svg" type="image/svg+xml">
+                                <img class="iconIMG" src="template/icon/add.png"/>
+                            </object></a> Participantes: </h3>
                 <div id="lista">
                     {% for usuario in proyecto.participantes %}
                         <div class="elemento" draggable="true"><div class="id" style="display: none;">{{ usuario.id }}</div>

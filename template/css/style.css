@@ -29,6 +29,11 @@
     display: inline-block;
 }
 
+.iconosLista {
+    display: inline-block;
+    position: absolute;
+}
+
 .elemento > .iconosLista {
     position: absolute;
     left: 20em
