@@ -3,7 +3,6 @@
 /**
  * @package Logger
  */
-
 /** int 1 */
 define('ERROR_LEVEL_CRITICAL', 1);
 /** int 2 */
@@ -22,10 +21,13 @@ class Logger{
 
     /** @var int Descriptionint nivel de log deseado en forma de máscara. */
     private $baseLevel;
+
     /** @var resource puntero al archivo de log */
     private static $handler;
+
     /** @var string nombre del archivo de log */
     private $filename;
+
     /** @var boolean TRUE si no se pudo abrir el archivo */
     private $noPuedoAbrirArchivo;
 
@@ -130,23 +132,33 @@ class Logger{
     }
 
     /**
-     * Une y comprime los registros del mes pasado
+     * Une y comprime los registros de los meses anteriores
      */
     private function rotar(){
-        //obtengo patrones
-        $dir    = directorySeparators(dirname(dirname(__FILE__)) . '/log/');
-        $mes    = date('Ym', strtotime("-1 month"));
-        //ver cómo rotar en caso que haya archivos de más de un mes.
-        $patron = $mes . '*.txt';
-        $files  = glob($dir . $patron);
-        //si no hay archivos para comprimir, salgo y continuo por otro lado
-        if(!$files || count($files) == 0){
-            return;
-        }
-        //comprimo archivos del mes pasado
-        if($this->rotarComprimir($files, $dir . $mes . '.txt')){
-            //elimino los archivos comprimidos
-            $this->rotarEliminarArchivos($files);
+        $dir           = directorySeparators(dirname(dirname(__FILE__)) . '/log/');
+        //uso ciclo para rotar todos los meses
+        //mientras haya archivos de texto (nota: se espera que sólo haya archivos con patrón "añomesdia.txt")
+        $diferenciaMes = 0;
+        while(glob($dir . '*.txt')){
+            //inicializo en 0 y decremento ACÁ para poder usar "continue" más adelante.
+            --$diferenciaMes;
+            if($diferenciaMes < -96){
+                //busco archivos de 8 años. Si siguen habiendo archivos de texto, hay basura en la carpeta de log.
+                break;
+            }
+            //obtengo patrones
+            $mes    = date('Ym', strtotime($diferenciaMes . " month"));
+            $patron = $mes . '*.txt';
+            $files  = glob($dir . $patron);
+            //si no hay archivos para comprimir, continuo con otro mes
+            if(!$files || count($files) == 0){
+                continue;
+            }
+            //comprimo archivos del mes pasado
+            if($this->rotarComprimir($files, $dir . $mes . '.txt')){
+                //elimino los archivos comprimidos
+                $this->rotarEliminarArchivos($files);
+            }
         }
     }
 
@@ -168,8 +180,7 @@ class Logger{
             }
             $exito = TRUE;
         }catch(Exception $e){
-            $this->log('Imposible almcenar archivos de registro antíguos. ' . $e->getMessage(),
-                       ERROR_LEVEL_WARNING);
+            $this->log('Imposible almcenar archivos de registro antíguos. ' . $e->getMessage(), ERROR_LEVEL_WARNING);
             $exito = FALSE;
         }
         return $exito;
@@ -182,8 +193,7 @@ class Logger{
     private function rotarEliminarArchivos($files){
         foreach($files as $file){
             if(!@unlink($file)){
-                $this->log("No se puede eliminar el archivo de log almacenado $file",
-                           ERROR_LEVEL_WARNING);
+                $this->log("No se puede eliminar el archivo de log almacenado $file", ERROR_LEVEL_WARNING);
             }
         }
     }
