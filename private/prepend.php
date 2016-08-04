@@ -1,4 +1,9 @@
 <?php
+/**
+ * Archivo encargado de incluir todo lo necesario para cada pundo de la operación.
+ * También maneja la session del navegador en caso de ser necesario
+ * @package backEnd
+ */
 
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'compatibilidad.php');
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'enviroment.php');
@@ -39,7 +44,6 @@ if(php_sapi_name() != 'cli' && !isset($esUnaPruebaDelProceso)){
     chdir(dirname(__FILE__));
     require_once('phpmailer/PHPMailerAutoload.php');
 }
-
 
 
 

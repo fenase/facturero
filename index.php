@@ -1,4 +1,8 @@
 <?php
+/**
+ * Página principal para logIn
+ * @package frontEnd
+ */
 
 $twigVariables['title'] = 'Administración del Facturero Baufest';
 

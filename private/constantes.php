@@ -1,4 +1,8 @@
 <?php
+/**
+ * Constantes operativas
+ * @package config
+ */
 
 define('USER_SEARCH_TIPE_ID', 0);
 define('USER_SEARCH_TIPE_USER', 1);

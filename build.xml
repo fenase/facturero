@@ -22,6 +22,7 @@
     <property name="sonar.sources" value="${basedir}" />
     <property name="sonar.binaries" value="${basedir}" />
 	<property name="sonar.exclusions" value="lib/**/*"/>
+	<property name="sonar.sourceEncoding" value="UTF-8"/>
 
  <!-- Uncomment the following when the tools are in ${basedir}/vendor/bin -->
  <!-- <property name="toolsdir" value="${basedir}/vendor/bin/"/> -->

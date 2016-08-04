@@ -1,4 +1,9 @@
 <?php
+/**
+ * Archivo de configuración
+ * Se configura la base de datos y se obtiene el resto de las configuraciones desde allí.
+ * @package config
+ */
 
 /* BASE DE DATOS: */
 define('DBHOST', 'localhost');

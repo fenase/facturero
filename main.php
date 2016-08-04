@@ -1,4 +1,8 @@
 <?php
+/**
+ * Página principal del sitio (con usuario logueado)
+ * @package frontEnd
+ */
 
 $twigVariables['title'] = 'Página principal';
 

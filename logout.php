@@ -1,4 +1,8 @@
 <?php
+/**
+ * Página para salir del sistema y eliminar la sesion
+ * @package frontEnd
+ */
 
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'prepend.php');
 

@@ -1,12 +1,19 @@
 <?php
+/**
+ * contiene clase DummyUsuario
+ */
 
 /**
- * Description of DummyUsuario
- *
+ * Usuario genérico para realizar filtrado dentro de arreglos de usuarios
  * @author FedSeckel
  */
 class DummyUsuario extends Usuario{
 
+    /**
+     * Crea el dummy
+     * @param $identificacion dato a cargar
+     * @param int $tipoID tipo de dato a cargar (nombre, id)
+     */
     public function __construct($identificacion, $tipoID = USER_SEARCH_TIPE_ID){
         $this->id   = NULL;
         $this->user = NULL;

@@ -66,9 +66,9 @@ function get_topmost_script($filenameOnly = FALSE){
 
 /**
  * array_search buscando por un campo determinado.
- * @param type $needle ¿Qué se busca?
- * @param type $haystack ¿En qué diccionario?
- * @param type $field ¿Qué campo hay que comparar?
+ * @param $needle ¿Qué se busca?
+ * @param array $haystack ¿En qué diccionario?
+ * @param string $field ¿Qué campo hay que comparar?
  * @return int clave del valor encontrado, FALSE en caso de no encontrarse
  */
 function getIndexByField($needle, $haystack, $field){

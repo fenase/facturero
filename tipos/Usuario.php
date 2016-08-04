@@ -1,7 +1,11 @@
 <?php
+/**
+ * Contiene clase usuario
+ * @package Tipos de datos
+ */
 
 /**
- * Clase usuario
+ * Clase Usuario
  * @package Tipos de datos
  * @author fedseckel
  */

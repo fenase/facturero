@@ -1,8 +1,10 @@
 <?php
 
 /**
+ * Contiene clase y constantes referidas al sistema de registro.
  * @package Logger
  */
+
 /** int 1 */
 define('ERROR_LEVEL_CRITICAL', 1);
 /** int 2 */

@@ -1,4 +1,3 @@
 @echo off
 rd /s /q docs
-C:\libreriasphp\phpDocumentor-2.8.1\bin\phpdoc.bat
-
+C:\wamp\bin\php\php5.3.5\php.exe C:\libreriasphp\phpDocumentor.phar

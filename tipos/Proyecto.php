@@ -1,7 +1,11 @@
 <?php
+/**
+ * Contiene clase proyecto
+ * @package Tipos de datos
+ */
 
 /**
- * Clase proyecto
+ * Clase Proyecto
  * @package Tipos de datos
  * @author FedSeckel
  */
