@@ -1,0 +1,185 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="fenase (generated)" id="1470333344404-1" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="config">
+            <column name="llave" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="valor" type="VARCHAR(255)"/>
+            <column defaultValue="MIXED" name="type" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-2" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="proyectos">
+            <column autoIncrement="true" name="idproyectos" type="INT UNSIGNED">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="nombre" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="VI" name="frecuencia" remarks="separado por '|': LU|MA|MI|JU|VI|SA|DO&#10;si es número: cada cuantos días" type="VARCHAR(45)"/>
+            <column defaultValueNumeric="0" name="cantidadParticipantes" type="SMALLINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="1" name="siguienteIndex" type="SMALLINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comentarios" remarks="Comentarios del proyecto" type="VARCHAR(1000)"/>
+            <column name="leyenda" remarks="Agregar texto en los mensajes" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-3" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="usuarios">
+            <column autoIncrement="true" name="idusuarios" type="INT UNSIGNED">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="user" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pass" type="VARCHAR(255)"/>
+            <column name="ultimoLogin" type="datetime"/>
+            <column defaultValueNumeric="0" name="loginenabled" type="TINYINT(3) UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="verificacion" type="VARCHAR(45)"/>
+            <column name="mail" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="nombre" type="VARCHAR(45)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-4" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createTable tableName="usuariosenproyecto">
+            <column name="idusuarios" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idproyectos" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="orden" type="INT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="confirmado" remarks="Confirmado: El usuario participa luego de ser confirmado.&#10;Si él se suscribe a un proyecto, lo puede confirmar cualquier participante.&#10;Si es subscripto por un participante de un proyecto, él debe confirmarse." type="SMALLINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-5" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <insert tableName="config">
+            <column name="llave" value="ASUNTO_MAIL"/>
+            <column name="valor" value="Facturero"/>
+            <column name="type" value="MIXED"/>
+        </insert>
+        <insert tableName="config">
+            <column name="llave" value="INDEXURL"/>
+            <column name="valor" value="http://localhost/facturero/index.php"/>
+            <column name="type" value="MIXED"/>
+        </insert>
+        <insert tableName="config">
+            <column name="llave" value="MAILDEBUG"/>
+            <column name="valor" value="2"/>
+            <column name="type" value="MIXED"/>
+        </insert>
+        <insert tableName="config">
+            <column name="llave" value="REMITENTE_MAIL"/>
+            <column name="valor" value="mail@example.com"/>
+            <column name="type" value="MIXED"/>
+        </insert>
+        <insert tableName="config">
+            <column name="llave" value="REMITENTE_NOMBRE"/>
+            <column name="valor" value="Facturero"/>
+            <column name="type" value="MIXED"/>
+        </insert>
+        <insert tableName="config">
+            <column name="llave" value="SMTPAUTH"/>
+            <column name="valor" value="TRUE"/>
+            <column name="type" value="BOOLEAN"/>
+        </insert>
+        <insert tableName="config">
+            <column name="llave" value="SMTPPASS"/>
+            <column name="valor" value="NA"/>
+            <column name="type" value="MIXED"/>
+        </insert>
+        <insert tableName="config">
+            <column name="llave" value="SMTPPORT"/>
+            <column name="valor" value="587"/>
+            <column name="type" value="MIXED"/>
+        </insert>
+        <insert tableName="config">
+            <column name="llave" value="SMTPSECURE"/>
+            <column name="valor" value="tls"/>
+            <column name="type" value="MIXED"/>
+        </insert>
+        <insert tableName="config">
+            <column name="llave" value="SMTPSERVER"/>
+            <column name="valor" value="smtp.example.com"/>
+            <column name="type" value="MIXED"/>
+        </insert>
+        <insert tableName="config">
+            <column name="llave" value="SMTPUSER"/>
+            <column name="valor" value="mail@example.com"/>
+            <column name="type" value="MIXED"/>
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>llave in ('ASUNTO_MAIL', 'INDEXURL', 'MAILDEBUG', 'REMITENTE_MAIL', 'REMITENTE_NOMBRE', 'SMTPAUTH', 'SMTPPASS', 'SMTPPORT', 'SMTPSECURE', 'SMTPSERVER', 'SMTPUSER')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-7" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <insert tableName="usuarios">
+            <column name="user" value="admin"/>
+            <column name="pass" value="e8e56ae73ac8833910893762f96282994636ebe7"/>
+            <column name="ultimoLogin" valueDate="2016-08-04 14:47:13.0"/>
+            <column name="loginenabled" valueNumeric="1"/>
+            <column name="verificacion" value=""/>
+            <column name="mail" value=""/>
+            <column name="nombre" value="Administrador"/>
+        </insert>
+        <rollback>
+            <delete tableName="usuarios">
+                <where>user = 'admin'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-9" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addPrimaryKey columnNames="llave" constraintName="PRIMARY" tableName="config"/>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-10" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addPrimaryKey columnNames="user" constraintName="PRIMARY" tableName="usuarios"/>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-14" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createIndex indexName="NOMBRE" tableName="proyectos">
+            <column name="nombre"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-15" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createIndex indexName="NOMBRE" tableName="usuarios">
+            <column name="nombre"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-16" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createIndex indexName="PERSONAS" tableName="usuariosenproyecto">
+            <column name="idusuarios"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-17" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createIndex indexName="PROYECTOS" tableName="usuariosenproyecto">
+            <column name="idproyectos"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-18" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <createIndex indexName="PROYECTOSORDEN" tableName="usuariosenproyecto">
+            <column name="idproyectos"/>
+            <column name="orden"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-19" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="idproyectos" baseTableName="usuariosenproyecto" constraintName="PROYECTOS" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="idproyectos" referencedTableName="proyectos"/>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="1470333344404-20" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <addForeignKeyConstraint baseColumnNames="idusuarios" baseTableName="usuariosenproyecto" constraintName="USUARIOS" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="idusuarios" referencedTableName="usuarios"/>
+    </changeSet>
+</databaseChangeLog>

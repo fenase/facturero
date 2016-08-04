@@ -1,0 +1,47 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="fenase (generated)" id="TEST1" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <insert tableName="proyectos">
+            <column name="nombre" value="Prueba basica"/>
+            <column name="frecuencia" value="1"/>
+            <column name="cantidadParticipantes" valueNumeric="1"/>
+            <column name="siguienteIndex" valueNumeric="1"/>
+            <column name="comentarios" value="comentate"/>
+            <column name="leyenda" value="soy leyenda"/>
+        </insert>
+        <rollback>
+            <delete tableName="proyectos">
+                <where>nombre = 'Prueba basica'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="TEST2" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <insert tableName="usuarios">
+            <column name="user" value="fenase"/>
+            <column name="pass" value="c17c03a317cd23e14265b4b1ff0f333186ab63e8"/>
+            <column name="ultimoLogin" valueDate="2015-06-01 14:19:49.0"/>
+            <column name="loginenabled" valueNumeric="1"/>
+            <column name="verificacion"/>
+            <column name="mail" value="fenase@baufest.com"/>
+            <column name="nombre" value="Federico Seckel"/>
+        </insert>
+        <rollback>
+            <delete tableName="usuarios">
+                <where>user = 'fenase'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+    <changeSet author="fenase (generated)" id="TEST3" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+        <insert tableName="usuariosenproyecto">
+            <column name="idusuarios" valueComputed="(SELECT idusuarios FROM usuarios WHERE user = 'fenase')"/>
+            <column name="idproyectos" valueComputed="(SELECT idproyectos FROM proyectos WHERE nombre = 'Prueba basica')"/>
+            <column name="orden" valueNumeric="1"/>
+            <column name="confirmado" valueNumeric="0"/>
+        </insert>
+        <rollback>
+            <delete tableName="usuariosenproyecto">
+                <where>idusuarios = (SELECT idusuarios FROM usuarios WHERE user = 'fenase') and idproyectos = (SELECT idproyectos FROM proyectos WHERE nombre = 'Prueba basica')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
