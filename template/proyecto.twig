@@ -49,11 +49,22 @@
                     </td>
                 </tr>
             </table>
-            <div style="participantes">
-                <h3><a href="javascript:proyectoAgregarParticipante()">
-                            <object class="iconIMG" data="template/icon/add.svg" type="image/svg+xml">
-                                <img class="iconIMG" src="template/icon/add.png"/>
-                            </object></a> Participantes: </h3>
+            <div class="participantes">
+                <h3> Participantes: </h3>
+                <div class="opcionAgregar">
+                    <select id="participantesDisponibles" name="participantesDisponibles">
+                        {% for usuario in usuariosDisponibles %}
+                            <option id="{{ usuario.id }}">
+                                {{ usuario.nombre }} ({{ usuario.user }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <a href="javascript:proyectoAgregarParticipante()">
+                                <object class="iconIMG" data="template/icon/add.svg" type="image/svg+xml">
+                                    <img class="iconIMG" src="template/icon/add.png"/>
+                                </object>
+                    </a>
+                </div>
                 <div id="lista">
                     {% for usuario in proyecto.participantes %}
                         <div class="elemento" draggable="true"><div class="id" style="display: none;">{{ usuario.id }}</div>

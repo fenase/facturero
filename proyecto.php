@@ -26,7 +26,19 @@ if(idValido($_GET['sacarParticipante'])){
     $proyecto->guardar();
     redirect($_SERVER['PHP_SELF'] . '?id=' . $_GET['id']);
 }
-$twigVariables['proyecto'] = $proyecto;
-$twigVariables['title']    = 'Vista de proyecto: ' . $proyecto->getNombre();
+
+if(idValido($_GET['agregarParticipante'])){
+    $proyecto->IngresarParticipante($_GET['agregarParticipante']);
+    $proyecto->guardar();
+    redirect($_SERVER['PHP_SELF'] . '?id=' . $_GET['id']);
+}
+
+$idUsuariosParticipantes = usuario::todasLasIds($proyecto->getParticipantes(), 1);
+$usuariosDisponibles     = usuario::todosLosUsuarios($idUsuariosParticipantes, TRUE, SORT_NAME);
+
+
+$twigVariables['proyecto']            = $proyecto;
+$twigVariables['title']               = 'Vista de proyecto: ' . $proyecto->getNombre();
+$twigVariables['usuariosDisponibles'] = $usuariosDisponibles;
 
 require_once('private/mainEcho.php');

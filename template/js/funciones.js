@@ -1,5 +1,5 @@
-function guardarLista() {
-    var data = $("#lista .elemento").map(function () {
+function guardarLista(){
+    var data = $("#lista .elemento").map(function(){
         return $(this).children(".id").html();
     }).get();
     $("input[name=listSortOrder]").val(data.join("|"));
@@ -8,9 +8,9 @@ function guardarLista() {
 }
 
 function proyectoAgregarParticipante(){
-    alert('TODO: agregar participante');
+    window.location.href = window.location.href + '&agregarParticipante=' + $("#participantesDisponibles").find('option:selected').attr('id');
 }
 
-function proyectoEliminarParticipante(id) {
+function proyectoEliminarParticipante(id){
     window.location.href = window.location.href + '&sacarParticipante=' + id;
 }

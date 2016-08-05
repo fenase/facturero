@@ -294,13 +294,33 @@ class Usuario{
     }
 
     /**
-     * Carga todos los usuarios 
+     * Carga todos los usuarios
+     * @param Array(int) $IDs id de usuario a incluir para restringir la búsqueda
+     * @param boolean $negativo invierte la búsqueda por id
      * @return Array(usuario)
      */
-    public static function todosLosUsuarios(){
+    public static function todosLosUsuarios($IDs = NULL, $negativo = FALSE, $sorType = SORT_ID){
         //nueva db por ser static
-        $l        = new Database();
-        $query    = "SELECT distinct(idusuarios) as idusuarios FROM usuarios";
+        $l     = new Database();
+        $query = "SELECT distinct(idusuarios) as idusuarios FROM usuarios ";
+        if(is_array($IDs) && count($IDs) > 0){
+            $query .= " WHERE idusuarios "
+                    . (($negativo) ? 'NOT' : '')
+                    . " IN (" . implode(', ', $IDs) . ") ";
+        }
+        switch($sorType){
+            case SORT_NAME:
+                $query .= " ORDER BY usuarios.nombre";
+                break;
+            case SORT_USERNAME;
+                $query .= " ORDER BY usuarios.user";
+                break;
+            case SORT_ID;
+                $query .= " ORDER BY usuarios.idusuarios";
+                break;
+            default:
+                break;
+        }
         $res      = $l->query($query);
         $usuarios = array();
         while(($row      = $res->fetch_assoc())){
@@ -309,5 +329,31 @@ class Usuario{
         $res->free();
         return $usuarios;
     }
-    
+
+    /**
+     * Devuelve un array con los números de usuario para un conjunto de usuarios dado
+     * @param usuario $usuarios Conjunto de usuarios
+     * @param int $sort ordenar salida: 0 (default) sin ordenar, 1 ordena ascendentemente, -1 ordena descendentemente
+     * @return Array(int) arreglo de IDs. FALSE en caso de no encontrar ninguna.
+     */
+    public static function todasLasIds($usuarios, $sort = 0){
+        foreach($usuarios as $usuario){
+            $res[] = $usuario->id;
+        }
+        if(!isset($res)){
+            return FALSE;
+        }
+        switch($sort){
+            case 1:
+                sort($res, SORT_NUMERIC);
+                break;
+            case -1:
+                rsort($res, SORT_NUMERIC);
+                break;
+            default:
+                break;
+        }
+        return $res;
+    }
+
 }

@@ -56,8 +56,9 @@ class Database{
         if(!self::$references[$this->thisLink]){
             $this->cerrar();
         }else{
-            $logger = new Logger;        
-            $logger->log("No se cierra base de datos (id ".self::$links[$this->thisLink]->thread_id.") ya que quedan referencias (Refs[".$this->thisLinkREDACTED."]=".self::$references[$this->thisLink].")");
+            $logger = new Logger;
+            //uso @ para eliminar errores ya que el destructor se llama al cierre del script. La limpieza puede haber cerrado la conexión antes de tener tiempo de hacerlo explícitamente
+            @$logger->log("No se cierra base de datos (id ".self::$links[$this->thisLink]->thread_id.") ya que quedan referencias (Refs[".$this->thisLinkREDACTED."]=".self::$references[$this->thisLink].")");
         }
     }
 
@@ -68,6 +69,7 @@ class Database{
     private function cerrar(){
         @self::$links[$this->thisLink]->kill($tid = self::$links[$this->thisLink]->thread_id);
         @self::$links[$this->thisLink]->close();
+        unset(self::$links[$this->thisLink]);
         $logger = new Logger();
         $logger->log("Cerrada la conexión a la base de datos id $tid");
     }

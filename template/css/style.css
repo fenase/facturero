@@ -44,3 +44,7 @@
     pointer-events: none;
 }
 
+.participantes > .opcionAgregar{
+    display: block;
+    margin-bottom: 1.33em;
+}

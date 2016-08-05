@@ -184,6 +184,7 @@ class Proyecto{
                     . "nombre = '" . $this->nombre . "', "
                     . "frecuencia = '" . $this->frecuencia . "', "
                     . "cantidadParticipantes = '" . $this->cantidadParticipantes . "', "
+                    . "siguienteIndex = '" . $this->siguienteParticipanteIndex . "', "
                     . "comentarios = '" . $this->comentarios . "', "
                     . "leyenda = '" . $this->leyenda . "' "
                     . "WHERE idproyectos = '" . $this->id . "'";
@@ -217,10 +218,26 @@ class Proyecto{
     public function IngresarParticipante($idIn, $donde = NULL){
         //decido si obtuve valor de ubicación. Si no, por defecto
         if(is_null($donde)){
-            $donde = $this->siguienteParticipanteIndex - 1;
+            $donde = $this->siguienteParticipanteIndex;
         }
         $donde %= $this->cantidadParticipantes;
-        array_splice($this->participantes, $donde, 0, new Usuario($idIn));
+        $usuarioAInsertar = new usuario($idIn);
+        array_splice($this->participantes, $donde, 0, Array($usuarioAInsertar));
+        //recontruir orden
+        if($donde <= $this->siguienteParticipanteIndex){
+            //si inserté antes del siguiente, se movió el siguiente. No es necesario tomar módulo ya que tengo al menos uno más que antes.
+            $this->siguienteParticipanteIndex++;
+        }
+        foreach($this->participantes as $participante){
+            if($participante->getId() == $idIn){
+                //genero orden para el participante recién ingresado
+                $participante->setOrden($donde);
+            }
+            if($participante->getOrden() >= $donde){
+                //muevo los siguientes para más adelante
+                $participante->setOrden($participante->getOrden() + 1);
+            }
+        }
         $this->cantidadParticipantes = count($this->participantes);
     }
 

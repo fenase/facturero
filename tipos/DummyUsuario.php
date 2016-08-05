@@ -34,7 +34,7 @@ class DummyUsuario extends Usuario{
     }
 
     /**
-     * Verifica si un usuario determinado está identificado con $id
+     * Verifica si un usuario determinado NO está identificado con $id
      * @param Usuario $id
      */
     public function hasIDNotEqual($id){
