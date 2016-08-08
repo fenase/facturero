@@ -24,8 +24,8 @@
             <column name="ultimoLogin" valueDate="2015-06-01 14:19:49.0"/>
             <column name="loginenabled" valueNumeric="1"/>
             <column name="verificacion"/>
-            <column name="mail" value="fenase@example.com"/>
-            <column name="nombre" value="Federico Seckel"/>
+            <column name="mail" value="pruebas@example.com"/>
+            <column name="nombre" value="usuario de pruebas"/>
         </insert>
         <rollback>
             <delete tableName="usuarios">

@@ -330,14 +330,14 @@ class Usuario{
      * Devuelve un array con los números de usuario para un conjunto de usuarios dado
      * @param usuario $usuarios Conjunto de usuarios
      * @param int $sort ordenar salida: 0 (default) sin ordenar, 1 ordena ascendentemente, -1 ordena descendentemente
-     * @return Array(int) arreglo de IDs. FALSE en caso de no encontrar ninguna.
+     * @return Array(int) arreglo de IDs. NULL en caso de no encontrar ninguna.
      */
     public static function todasLasIds($usuarios, $sort = 0){
         foreach($usuarios as $usuario){
             $res[] = $usuario->id;
         }
         if(!isset($res)){
-            return FALSE;
+            return NULL;
         }
         switch($sort){
             case 1:

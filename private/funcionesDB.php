@@ -82,20 +82,8 @@ class Database{
         $STH->execute($data);
         $this->insert_id = self::$links[$this->thisLinkREDACTED]->lastInsertId();
         $logger = new Logger();
-        $logger->log('query exitosa: ' . $STH->queryString . ' con parámetros ' . print_r($data, true));
+        $logger->log('query exitosa: ' . $STH->queryString);
         return $STH->fetchAll(PDO::FETCH_ASSOC);
-        /*
-        
-        
-        if(($res = self::$links[$this->thisLink]->query($query)) === FALSE){
-            throw new Exception('error en la query "' . $query . '": ' . self::$links[$this->thisLink]->error);
-        }else{
-            $this->insert_id = self::$links[$this->thisLink]->insert_id;
-            $logger = new Logger();
-            $logger->log('query exitosa: ' . $query . '');
-            return $res;
-        }
-         */
     }
 
     /**

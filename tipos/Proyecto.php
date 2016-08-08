@@ -250,6 +250,18 @@ class Proyecto{
     }
 
     /**
+     * Muestra los campos posibles para una acción determinada para los proyectos
+     * @param int $cuales PROY_FIELD_SHOW, PROY_FIELD_EDIT, PROY_FIELD_CREATE
+     * @return Array
+     */
+    public static function obtenerCamposVisibles($cuales = 07){
+        //nueva db por ser static
+        $l = new Database();
+        $query = "SELECT orden, nombreColumnaDB, nombreMostrar FROM camposproyecto where mostrarEn & :cuales <> 0";
+        return $l->query($query, array('cuales' => $cuales));
+    }
+
+    /**
      * Auxiliar de guardarParticipantes. Crea el string con los valores para ingresar en la query de almacenamiento de valores.
      * @param OUT Array $data Arreglo de datos para PDO
      * @return string

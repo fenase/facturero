@@ -13,7 +13,7 @@
             <column name="nombreMostrar" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="mostrarEnNuevo" type="TINYINT" defaultValue="0">
+            <column name="mostrarEn" type="TINYINT" defaultValue="0" remarks="Máscara de 3 bit. 1 para mostrar, 2 para editar, 4 para creación">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -24,30 +24,31 @@
         <insert tableName="camposProyecto">
             <column name="nombreColumnaDB" value="nombre"/>
             <column name="nombreMostrar" value="Nombre"/>
-            <column name="mostrarEnNuevo" valueBoolean="TRUE"/> 
+            <column name="mostrarEn" valueNumeric="5"/> 
         </insert>
         <insert tableName="camposProyecto">
             <column name="nombreColumnaDB" value="frecuencia"/>
             <column name="nombreMostrar" value="Frecuencia"/>
-			<column name="mostrarEnNuevo" valueBoolean="TRUE"/> 
+            <column name="mostrarEn" valueNumeric="7"/>
         </insert>
         <insert tableName="camposProyecto">
             <column name="nombreColumnaDB" value="cantidadParticipantes"/>
             <column name="nombreMostrar" value="Cantidad de Participantes"/>
+            <column name="mostrarEn" valueNumeric="1"/>
         </insert>
         <insert tableName="camposProyecto">
             <column name="nombreColumnaDB" value="siquienteIndex"/>
             <column name="nombreMostrar" value="id usuario suguiente"/>
         </insert>
         <insert tableName="camposProyecto">
-            <column name="nombreColumnaDB" value="comentatios"/>
+            <column name="nombreColumnaDB" value="comentarios"/>
             <column name="nombreMostrar" value="Comentarios"/>
-			<column name="mostrarEnNuevo" valueBoolean="TRUE"/> 
+            <column name="mostrarEn" valueNumeric="7"/> 
         </insert>
         <insert tableName="camposProyecto">
             <column name="nombreColumnaDB" value="leyenda"/>
             <column name="nombreMostrar" value="Leyenda"/>
-			<column name="mostrarEnNuevo" valueBoolean="TRUE"/> 
+            <column name="mostrarEn" valueNumeric="7"/> 
         </insert>
         <rollback>
             <dropTable tableName="camposProyecto" />

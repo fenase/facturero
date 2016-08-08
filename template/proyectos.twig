@@ -1,23 +1,34 @@
-        <div>
-            <table>
-                <tr>
-                    <th>
-                        Id Proyecto
-                    </th>
-                    <th>
-                        Nombre
-                    </th>
-                    <th>
-                        Frecuencia
-                    </th>
-                    <th>
-                        Cantidad de participantes
-                    </th>
-                    <th>
-                        Acci&oacute;n
-                    </th>
-                </tr>
-                {% for item in proyectos %}
+<div class="proyectos">
+
+    <div class="opcionAgregar" >
+        <a href="#" id="openModal">
+            <object class="iconIMG" data="template/icon/add.svg" type="image/svg+xml">
+                <img class="iconIMG" src="template/icon/add.png"/>
+            </object>
+            Proyecto Nuevo
+        </a>
+    </div>
+
+    <div>
+        <table>
+            <tr>
+                <th>
+                    Id Proyecto
+                </th>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Frecuencia
+                </th>
+                <th>
+                    Cantidad de participantes
+                </th>
+                <th>
+                    Acci&oacute;n
+                </th>
+            </tr>
+            {% for item in proyectos %}
                 <tr>
                     <td>
                         {{ item.id }}
@@ -34,6 +45,43 @@
                     <td>
                         {{ item.accion }}
                     </td>
-                </tr>{% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">x</span>
+        <h3>Crear Nuevo Proyecto</h3>
+
+        <form id="fNuevoProyecto" name="fNuevoProyecto" method="POST">
+            <table>
+                {% for item in camposNuevoP %}
+                    <tr>
+                        <td>
+                            {{ item.nombreMostrar }}
+                        </td>
+                        <td>
+                            <input type="text" length="10" name="{{ item.nombreColumnaDB }}" id="{{ item.nombreColumnaDB }}"/>
+                        </td>
+                    </tr>
+                {% endfor %}
             </table>
-        </div>
+            <input name="accion" type="hidden" />
+        </form>
+        <button onclick="agregarProyecto();">Crear</button>
+
+
+    </div>
+
+</div>
+

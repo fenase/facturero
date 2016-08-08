@@ -8,6 +8,10 @@ define('USER_SEARCH_TIPE_ID', 0);
 define('USER_SEARCH_TIPE_USER', 1);
 define('USER_MANUAL_DEFINE', 2);
 
+define('PROY_FIELD_SHOW', 1);
+define('PROY_FIELD_EDIT', 2);
+define('PROY_FIELD_CREATE', 4);
+
 define('SORT_NAME', 1);
 define('SORT_ID', 0);
 define('SORT_USERNAME', 2);
