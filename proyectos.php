@@ -9,7 +9,6 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEP
 if($_POST['accion'] == ACC_GUARDAR){
     $nuevoProyecto = new Proyecto(0, $_POST);
     $nuevoProyecto->guardar();
-    var_dump($nuevoProyecto);
 }
 
 
