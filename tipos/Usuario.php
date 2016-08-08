@@ -44,7 +44,7 @@ class Usuario{
      */
     function __construct($identificacion, $tipoID = USER_SEARCH_TIPE_ID,
                          $datos = NULL){
-        if(!self::$db || !self::$db->ping()){
+        if(!self::$db){
             self::$db = new Database();
         }
         if($tipoID != USER_MANUAL_DEFINE){
@@ -52,15 +52,14 @@ class Usuario{
                 $tipobusquedatext = 'idusuarios';
             }elseif($tipoID == USER_SEARCH_TIPE_USER){
                 $tipobusquedatext = 'user';
-                $identificacion   = "'" . $identificacion . "'";
             }else{
                 throw new Exception('método de búsqueda de usuario no válido');
             }
             $query = "SELECT idusuarios, user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre "
                     . "FROM usuarios "
-                    . "WHERE $tipobusquedatext = $identificacion";
-            $res   = self::$db->query($query);
-            if(($datos = $res->fetch_assoc())){
+                    . "WHERE $tipobusquedatext = :identificacion";
+            $res   = self::$db->query($query, array('identificacion' => $identificacion));
+            if(($datos = $res[0])){
                 $this->id           = $datos['idusuarios'];
                 $this->user         = $datos['user'];
                 $this->pass         = $datos['pass'];
@@ -82,7 +81,7 @@ class Usuario{
                     $this->id = FALSE;
                 }
             }
-            $res->free();
+            
         }else{
             $this->id           = $datos['id'];
             $this->user         = $datos['user'];
@@ -208,10 +207,9 @@ class Usuario{
      * @return boolean
      */
     public function existe(){
-        $query = "SELECT 1 FROM usuarios WHERE idusuarios = " . $this->id;
-        $res   = self::$db->query($query);
-        $ret   = ($res->num_rows > 0);
-        $res->free();
+        $query = "SELECT 1 FROM usuarios WHERE idusuarios = ?";
+        $res   = self::$db->query($query, array($this->id));
+        $ret   = (count($res) > 0);
         return $ret;
     }
 
@@ -221,20 +219,19 @@ class Usuario{
     public function guardar(){
         if($this->existe()){
             $query = "UPDATE usuarios "
-                    . "SET user = '" . $this->user . "'"
-                    . ", pass = '" . $this->pass . "'"
-                    . ", ultimoLogin = '" . $this->ultimoLogin . "'"
-                    . ", loginenabled = '" . $this->loginEnabled . "'"
-                    . ", verificacion = '" . $this->verificacion . "'"
-                    . ", mail = '" . $this->mail . "'"
-                    . ", nombre = '" . $this->nombre . "'"
-                    . "WHERE idusuarios = " . $this->id;
-            self::$db->query($query);
+                    . "SET user = :user"
+                    . ", pass = :pass"
+                    . ", ultimoLogin = :ultimoLogin"
+                    . ", loginenabled = :loginEnabled"
+                    . ", verificacion = :verificacion"
+                    . ", mail = :mail"
+                    . ", nombre = :nombre"
+                    . " WHERE idusuarios = :id";
+            self::$db->query($query, get_object_vars($this));
         }else{
-            $query    = "INSERT INTO usuarios (user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre) VALUE ('"
-                    . $this->user . ", '" . $this->pass . "', '" . $this->ultimoLogin . "', '" . $this->loginEnabled . "', '"
-                    . $this->verificacion . "', '" . $this->mail . "', '" . $this->nombre . "')";
-            self::$db->query($query);
+            $query    = "INSERT INTO usuarios (user, pass, ultimoLogin, loginenabled, verificacion, mail, nombre) VALUE ("
+                    . ":user, :pass, :ultimoLogin, :loginEnabled, :verificacion, :mail, :nombre)";
+            self::$db->query($query, get_object_vars($this));
             $this->id = self::$db->insert_id;
         }
     }
@@ -283,13 +280,12 @@ class Usuario{
         $query = "SELECT up.idproyectos, p.nombre "
                 . "FROM usuariosenproyecto up "
                 . "JOIN proyectos p ON p.idproyectos = up.idproyectos "
-                . "WHERE up.idusuarios = " . $this->id . " "
+                . "WHERE up.idusuarios = :id "
                 . "ORDER BY p.nombre ASC";
-        $res   = self::$db->query($query);
-        while($row   = $res->fetch_assoc()){
+        $res   = self::$db->query($query, get_object_vars($this));
+        foreach($res as $row){
             $ret[] = array('id' => $row['idproyectos'], 'nombre' => $row['nombre']);
         }
-        $res->free();
         return $ret;
     }
 
@@ -297,18 +293,19 @@ class Usuario{
      * Carga todos los usuarios
      * @param Array(int) $IDs id de usuario a incluir para restringir la búsqueda
      * @param boolean $negativo invierte la búsqueda por id
-     * @return Array(usuario)
+     * @param int $sortType Forma de ordenar: SORT_ID, SORT_NAME, SORT_USERNAME
+     * @return \Usuario[]
      */
-    public static function todosLosUsuarios($IDs = NULL, $negativo = FALSE, $sorType = SORT_ID){
+    public static function todosLosUsuarios($IDs = NULL, $negativo = FALSE, $sortType = SORT_ID){
         //nueva db por ser static
         $l     = new Database();
         $query = "SELECT distinct(idusuarios) as idusuarios FROM usuarios ";
         if(is_array($IDs) && count($IDs) > 0){
             $query .= " WHERE idusuarios "
                     . (($negativo) ? 'NOT' : '')
-                    . " IN (" . implode(', ', $IDs) . ") ";
+                    . " IN (" . str_repeat('?, ', count($IDs)-1) . '?' . ") ";
         }
-        switch($sorType){
+        switch($sortType){
             case SORT_NAME:
                 $query .= " ORDER BY usuarios.nombre";
                 break;
@@ -321,12 +318,11 @@ class Usuario{
             default:
                 break;
         }
-        $res      = $l->query($query);
+        $res      = $l->query($query, $IDs);
         $usuarios = array();
-        while(($row      = $res->fetch_assoc())){
+        foreach($res as $row){
             $usuarios[] = new Usuario($row['idusuarios']);
         }
-        $res->free();
         return $usuarios;
     }
 

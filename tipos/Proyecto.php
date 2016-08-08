@@ -38,16 +38,16 @@ class Proyecto{
      * @throws Exception en caso de no encontrar id válida
      */
     function __construct($id, $datos = NULL){
-        if(!self::$db || !self::$db->ping()){
+        if(!self::$db){
             self::$db = new Database();
         }
         if(!$datos){
             //proyecto existente
             $query = "SELECT idproyectos, nombre, frecuencia, cantidadParticipantes, siguienteIndex, comentarios, leyenda "
                     . "FROM proyectos "
-                    . "WHERE idproyectos = $id";
-            $res   = self::$db->query($query);
-            if(($row   = $res->fetch_assoc())){
+                    . "WHERE idproyectos = :id";
+            $res   = self::$db->query($query, array('id' => $id));
+            if(($row   = $res[0])){
                 $this->id                         = $id;
                 $this->nombre                     = $row['nombre'];
                 $this->frecuencia                 = $row['frecuencia'];
@@ -58,7 +58,6 @@ class Proyecto{
             }else{
                 throw new Exception("proyecto (".$id.") no encontrado");
             }
-            $res->free();
 
             $this->participantes = $this->participantesDelProyecto();
         }else{
@@ -140,27 +139,14 @@ class Proyecto{
      * @return Usuario[]
      */
     private function participantesDelProyecto(){
-        $query = "SELECT u.idUsuarios, up.orden, u.user, u.pass, u.ultimoLogin, u.loginenabled, u.verificacion, u.mail, u.nombre "
+        $query = "SELECT u.idUsuarios as id, up.orden, u.user, u.pass, u.ultimoLogin, u.loginenabled, u.verificacion, u.mail, u.nombre "
                 . "FROM usuariosenproyecto up "
                 . "JOIN usuarios u ON up.idUsuarios = u.idUsuarios "
-                . "WHERE up.idproyectos = " . $this->id . " "
+                . "WHERE up.idproyectos = :id "
                 . "ORDER BY up.orden";
-        $res   = self::$db->query($query);
-        $datos = array();
-        while(($row   = $res->fetch_assoc())){
-            $dato['id']           = $row['idUsuarios'];
-            $dato['user']         = $row['user'];
-            $dato['pass']         = $row['pass'];
-            $dato['ultimoLogin']  = $row['ultimoLogin'];
-            $dato['loginEnabled'] = $row['loginenabled'];
-            $dato['verificacion'] = $row['verificacion'];
-            $dato['mail']         = $row['mail'];
-            $dato['nombre']       = $row['nombre'];
-            $dato['orden']        = $row['orden'];
-            $datos[]              = $dato;
-        }
-        $res->free();
-        return Usuario::crearUsuarios($datos);
+        $res   = self::$db->query($query, get_object_vars($this));
+        
+        return Usuario::crearUsuarios($res);
     }
 
     /**
@@ -171,25 +157,19 @@ class Proyecto{
             //nuevo proyecto
             $query = "INSERT INTO proyectos "
                     . "(nombre, frecuencia, cantidadParticipantes, comentarios, leyenda) VALUE "
-                    . "("
-                    . "'" . $this->nombre . "', "
-                    . "'" . $this->frecuencia . "', "
-                    . "'" . $this->cantidadParticipantes . "', "
-                    . "'" . $this->comentarios . "', "
-                    . "'" . $this->leyenda
-                    . "'" . ")";
+                    . "(:nombre, :frecuencia, :cantidadParticipantes, :comentarios, :leyenda)";
         }else{
             //actualizar
             $query = "UPDATE proyectos SET "
-                    . "nombre = '" . $this->nombre . "', "
-                    . "frecuencia = '" . $this->frecuencia . "', "
-                    . "cantidadParticipantes = '" . $this->cantidadParticipantes . "', "
-                    . "siguienteIndex = '" . $this->siguienteParticipanteIndex . "', "
-                    . "comentarios = '" . $this->comentarios . "', "
-                    . "leyenda = '" . $this->leyenda . "' "
-                    . "WHERE idproyectos = '" . $this->id . "'";
+                    . "nombre = :nombre, "
+                    . "frecuencia = :frecuencia, "
+                    . "cantidadParticipantes = :cantidadParticipantes, "
+                    . "siguienteIndex = :siguienteParticipanteIndex, "
+                    . "comentarios = :comentarios, "
+                    . "leyenda = :leyenda "
+                    . "WHERE idproyectos = :id";
         }
-        self::$db->query($query);
+        self::$db->query($query, get_object_vars($this));
         if($this->id === FALSE){
             $this->id = self::$db->insert_id;
         }
@@ -201,12 +181,13 @@ class Proyecto{
      */
     private function guardarParticipantes(){
         //borro todos los usuarios
-        $query = "DELETE FROM usuariosenproyecto WHERE idproyectos = " . $this->id;
-        self::$db->query($query);
+        $query = "DELETE FROM usuariosenproyecto WHERE idproyectos = ?";
+        self::$db->query($query, array($this->id));
         if($this->cantidadParticipantes){
-            $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . $this->listaQueryValuesUsuariosEnProyecto();
+            $data = array();
+            $query = "INSERT INTO usuariosenproyecto (idusuarios, idproyectos, orden) values " . $this->listaQueryValuesUsuariosEnProyecto($data);
             //vuelvo a insertar la lista.
-            self::$db->query($query);
+            self::$db->query($query, $data);
         }
     }
 
@@ -262,26 +243,29 @@ class Proyecto{
         $query     = "SELECT distinct(idproyectos) as idproyectos FROM proyectos";
         $res       = $l->query($query);
         $proyectos = array();
-        while(($row      = $res->fetch_assoc())){
+        foreach($res as $row){
             $proyectos[] = new Proyecto($row['idproyectos']);
         }
-        $res->free();
         return $proyectos;
     }
 
     /**
      * Auxiliar de guardarParticipantes. Crea el string con los valores para ingresar en la query de almacenamiento de valores.
+     * @param OUT Array $data Arreglo de datos para PDO
      * @return string
      */
-    private function listaQueryValuesUsuariosEnProyecto(){
+    private function listaQueryValuesUsuariosEnProyecto(&$data){
         $i   = 0;
         $res = '';
         do{
             $res .= '(';
-            $res .= $this->participantes[$i]->getId() . ', ';
-            $res .= $this->id . ', ';
-            $res .= $this->participantes[$i]->getOrden();
+            $res .= ":idParticipante{$i}, ";
+            $res .= ":idProyecto, ";
+            $res .= ":ordenParticipante{$i} ";
             $res .= ')';
+            $data['idParticipante'.$i] = $this->participantes[$i]->getId();
+            $data['idProyecto'] = $this->id;
+            $data['ordenParticipante'.$i] = $this->participantes[$i]->getOrden();
             $i++;
         }while($i < $this->cantidadParticipantes && $res .= ', ');
         return $res;

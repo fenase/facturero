@@ -28,20 +28,18 @@ class Database{
      * @param string $pass
      * @param string $db
      */
-    function __construct($host = DBHOST, $user = DBUSER, $pass = DBPASS, $db = DBDB){
-        $this->thisLink = "h:$host::u:$user::p:$pass::d:$db";
-        $this->thisLinkREDACTED = "h:$host::u:$user::p:******::d:$db";
-        if(!self::$links[$this->thisLink]){
-            self::$links[$this->thisLink] = new mysqli($host, $user, $pass, $db);
-            if(mysqli_connect_error()){
-                throw new Exception('imposible conectar a la base de datos: ' . mysqli_connect_error());
-            }else{
-                self::$references[$this->thisLink]++;
-                $logger = new Logger();
-                $logger->log("Conectado a la base de datos $db en $host (id: ".self::$links[$this->thisLink]->thread_id.") (Refs[".$this->thisLinkREDACTED."]=".self::$references[$this->thisLink].")");               
-            }
+    function __construct($host = DBHOST, $user = DBUSER, $pass = DBPASS, $db = DBDB, $driver = DBDRIVER){
+        $this->thisLink = "$driver:host=$host;dbname=$db";
+        $this->thisLinkREDACTED = "$driver::h:$host::u:$user::p:******::d:$db";
+        if(!self::$links[$this->thisLinkREDACTED]){
+            self::$links[$this->thisLinkREDACTED] = new PDO($this->thisLink, $user, $pass);
+            //si no se conecta, tira excepción
+            self::$references[$this->thisLinkREDACTED]++;
+            $logger = new Logger();
+            $logger->log("Conectado a la base de datos $db en $host (Refs[".$this->thisLinkREDACTED."]=".self::$references[$this->thisLinkREDACTED].")");               
+            
         }else{
-            self::$references[$this->thisLink]++;
+            self::$references[$this->thisLinkREDACTED]++;
             $logger = new Logger();
             $logger->log("Base de datos $db en $host ya conectada. Reutilizando vínculo (Refs[".$this->thisLinkREDACTED."]=".self::$references[$this->thisLink].")");
         }
@@ -50,36 +48,45 @@ class Database{
     /**
      * Se invoca cuando se pierden todas las referencias al objeto (o al final del script).
      * Cierra las conexiones que pierden referencia
+     * ¿ES NECESARIO CON PDO?
      */
     function __destruct(){
-        self::$references[$this->thisLink]--;
-        if(!self::$references[$this->thisLink]){
+        self::$references[$this->thisLinkREDACTED]--;
+        if(!self::$references[$this->thisLinkREDACTED]){
             $this->cerrar();
         }else{
             $logger = new Logger;
             //uso @ para eliminar errores ya que el destructor se llama al cierre del script. La limpieza puede haber cerrado la conexión antes de tener tiempo de hacerlo explícitamente
-            @$logger->log("No se cierra base de datos (id ".self::$links[$this->thisLink]->thread_id.") ya que quedan referencias (Refs[".$this->thisLinkREDACTED."]=".self::$references[$this->thisLink].")");
+            @$logger->log("No se cierra base de datos ya que quedan referencias (Refs[".$this->thisLinkREDACTED."]=".self::$references[$this->thisLinkREDACTED].")");
         }
     }
 
     /**
      * Cierra la conexión abierta.
      * Privada ya que no quiero que queden objetos sin conexión.
+     * ¿ES NECESARIO CON PDO?
      */
     private function cerrar(){
-        @self::$links[$this->thisLink]->kill($tid = self::$links[$this->thisLink]->thread_id);
-        @self::$links[$this->thisLink]->close();
-        unset(self::$links[$this->thisLink]);
-        $logger = new Logger();
-        $logger->log("Cerrada la conexión a la base de datos id $tid");
+        self::$links[$this->thisLinkREDACTED] = null;
+        unset(self::$links[$this->thisLinkREDACTED]);
     }
 
     /**
      * Ejecuta la consulta en la conexión abierta.
-     * @param string $query Consulta
-     * @return mixed MYSQLI_RESULT resultado en caso de éxito. BOOL FALSE en caso de falla
+     * @param string $query Consulta a preparar
+     * @param array $data arreglo asociativo con los parámetros de la consulta
+     * @return boolean exito de la llamada
      */
-    function query($query){
+    function query($query, $data = array()){
+        $STH = self::$links[$this->thisLinkREDACTED]->prepare($query);
+        $STH->execute($data);
+        $this->insert_id = self::$links[$this->thisLinkREDACTED]->lastInsertId();
+        $logger = new Logger();
+        $logger->log('query exitosa: ' . $STH->queryString . ' con parámetros ' . print_r($data, true));
+        return $STH->fetchAll(PDO::FETCH_ASSOC);
+        /*
+        
+        
         if(($res = self::$links[$this->thisLink]->query($query)) === FALSE){
             throw new Exception('error en la query "' . $query . '": ' . self::$links[$this->thisLink]->error);
         }else{
@@ -88,13 +95,17 @@ class Database{
             $logger->log('query exitosa: ' . $query . '');
             return $res;
         }
+         */
     }
 
     /**
      * Verifica que la conexión esté abierta
      * @return boolean
+     * @deprecated no se usa desde PDO
      */
     function ping(){
+        trigger_error('ping() is deprecated', E_USER_NOTICE);
+        debug_print_backtrace();
         return self::$links[$this->thisLink]->ping();
     }
 
@@ -102,8 +113,11 @@ class Database{
      * Escapa las cadenas para poder insertarlas en la db.
      * @param string $string
      * @return type
+     * @deprecated no se usa desde PDO
      */
     function escape_string($string){
+        trigger_error('escape_string() is deprecated', E_NOTICE);
+        debug_print_backtrace();
         return self::$links[$this->thisLink]->escape_string($string);
     }
 

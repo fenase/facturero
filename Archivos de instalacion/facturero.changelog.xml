@@ -1,7 +1,58 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-	<include file="facturero.changelog.init.xml" />
+    <include file="facturero.changelog.init.xml" />
     
+    <changeSet author="fenase" id="agregaTablaNombreCamposProyecto">
+        <createTable tableName="camposProyecto">
+            <column name="orden" type="INT UNSIGNED" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="nombreColumnaDB" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="nombreMostrar" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mostrarEnNuevo" type="TINYINT" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <insert tableName="camposProyecto">
+            <column name="nombreColumnaDB" value="idproyectos"/>
+            <column name="nombreMostrar" value="ID Proyecto"/>
+        </insert>
+        <insert tableName="camposProyecto">
+            <column name="nombreColumnaDB" value="nombre"/>
+            <column name="nombreMostrar" value="Nombre"/>
+            <column name="mostrarEnNuevo" valueBoolean="TRUE"/> 
+        </insert>
+        <insert tableName="camposProyecto">
+            <column name="nombreColumnaDB" value="frecuencia"/>
+            <column name="nombreMostrar" value="Frecuencia"/>
+			<column name="mostrarEnNuevo" valueBoolean="TRUE"/> 
+        </insert>
+        <insert tableName="camposProyecto">
+            <column name="nombreColumnaDB" value="cantidadParticipantes"/>
+            <column name="nombreMostrar" value="Cantidad de Participantes"/>
+        </insert>
+        <insert tableName="camposProyecto">
+            <column name="nombreColumnaDB" value="siquienteIndex"/>
+            <column name="nombreMostrar" value="id usuario suguiente"/>
+        </insert>
+        <insert tableName="camposProyecto">
+            <column name="nombreColumnaDB" value="comentatios"/>
+            <column name="nombreMostrar" value="Comentarios"/>
+			<column name="mostrarEnNuevo" valueBoolean="TRUE"/> 
+        </insert>
+        <insert tableName="camposProyecto">
+            <column name="nombreColumnaDB" value="leyenda"/>
+            <column name="nombreMostrar" value="Leyenda"/>
+			<column name="mostrarEnNuevo" valueBoolean="TRUE"/> 
+        </insert>
+        <rollback>
+            <dropTable tableName="camposProyecto" />
+        </rollback>
+    </changeSet>
 	
 	
 	

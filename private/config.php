@@ -6,6 +6,7 @@
  */
 
 /* BASE DE DATOS: */
+define('DBDRIVER', 'mysql');
 define('DBHOST', 'localhost');
 define('DBUSER', 'facturero');
 define('DBPASS', 'facturero');
@@ -16,7 +17,7 @@ $link = new Database(DBHOST, DBUSER, DBPASS, DBDB);
 $query    = "SELECT llave, valor, type FROM config WHERE 1";
 $res      = $link->query($query);
 $arreglos = array();
-while($row      = $res->fetch_assoc()){
+foreach($res as $row){
     switch(strtoupper($row['type'])){
         case 'ARRAY':
             $arreglos[$row['llave']][] = $row['valor'];

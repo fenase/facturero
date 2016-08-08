@@ -95,7 +95,7 @@
         <insert tableName="config">
             <column name="llave" value="SMTPAUTH"/>
             <column name="valor" value="TRUE"/>
-            <column name="type" value="BOOLEAN"/>
+            <column name="type" value="TINYINT"/>
         </insert>
         <insert tableName="config">
             <column name="llave" value="SMTPPASS"/>

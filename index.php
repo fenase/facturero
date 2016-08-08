@@ -11,11 +11,11 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEP
 $template      = $twig->loadTemplate('index.twig');
 
 if($_POST['action'] == login){
-    $login             = $link->escape_string($_POST['usr']);
+    $login             = $_POST['usr'];
     $userIntentaEntrar = new Usuario($login, USER_SEARCH_TIPE_USER);
     //si tengo usuario válido
     if($userIntentaEntrar->getId() !== FALSE){
-        $passLimpia    = $link->escape_string($_POST['pass']);
+        $passLimpia    = $_POST['pass'];
         $passIngresada = $passLimpia . $userIntentaEntrar->getUltimoLoginTimestamp();
         if(!$userIntentaEntrar->getLoginEnabled()){
             $twigVariables['error'] = 'USUARIO DESHABILITADO';
