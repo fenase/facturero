@@ -13,19 +13,19 @@
     -webkit-user-drag: element;
 }
 
-.elemento {
+.elemento, .elementob {
     padding: 2px;
 }
-.elemento:hover {
+.elemento:hover, .elementob:hover {
     padding: 0;
     border: 2px dashed #000;
 }
-.elemento.over {
+.elemento.over , .elementob:over, .la:over, .lb:over{
     padding: 0;
     border: 2px dashed #000;
 }
 
-.elemento * {
+.elemento * , .elementob *{
     display: inline-block;
 }
 
@@ -34,7 +34,7 @@
     position: absolute;
 }
 
-.elemento > .iconosLista {
+.elemento > .iconosLista , .elementob > .iconosLista{
     position: absolute;
     left: 20em
 }
@@ -44,9 +44,17 @@
     pointer-events: none;
 }
 
-.participantes > .opcionAgregar{
+.participantes > .opcionAgregar, .participantes > .lista{
     display: block;
     margin-bottom: 1.33em;
+    float:left;
+    width: 46%;
+    position: relative;
+}
+
+.participantes > .opcionAgregar > .lb, .participantes > .lista > .la{
+    min-width: 100%;
+    min-height: 100%;
 }
 
 .proyectos > .opcionAgregar{

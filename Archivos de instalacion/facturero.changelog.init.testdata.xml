@@ -19,23 +19,56 @@
     </changeSet>
     <changeSet author="fenase (generated)" id="TEST2" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <insert tableName="usuarios">
-            <column name="user" value="fenase"/>
+            <column name="user" value="test1"/>
             <column name="pass" value="c17c03a317cd23e14265b4b1ff0f333186ab63e8"/>
             <column name="ultimoLogin" valueDate="2015-06-01 14:19:49.0"/>
             <column name="loginenabled" valueNumeric="1"/>
             <column name="verificacion"/>
-            <column name="mail" value="pruebas@example.com"/>
-            <column name="nombre" value="usuario de pruebas"/>
+            <column name="mail" value="pruebas1@example.com"/>
+            <column name="nombre" value="1 de pruebas"/>
+        </insert>
+        <insert tableName="usuarios">
+            <column name="user" value="test2"/>
+            <column name="pass" value="c17c03a317cd23e14265b4b1ff0f333186ab63e8"/>
+            <column name="ultimoLogin" valueDate="2015-06-01 14:19:49.0"/>
+            <column name="loginenabled" valueNumeric="1"/>
+            <column name="verificacion"/>
+            <column name="mail" value="pruebas2@example.com"/>
+            <column name="nombre" value="2 de pruebas"/>
+        </insert>
+        <insert tableName="usuarios">
+            <column name="user" value="test3"/>
+            <column name="pass" value="c17c03a317cd23e14265b4b1ff0f333186ab63e8"/>
+            <column name="ultimoLogin" valueDate="2015-06-01 14:19:49.0"/>
+            <column name="loginenabled" valueNumeric="1"/>
+            <column name="verificacion"/>
+            <column name="mail" value="pruebas3@example.com"/>
+            <column name="nombre" value="3 de pruebas"/>
+        </insert>
+        <insert tableName="usuarios">
+            <column name="user" value="test4"/>
+            <column name="pass" value="c17c03a317cd23e14265b4b1ff0f333186ab63e8"/>
+            <column name="ultimoLogin" valueDate="2015-06-01 14:19:49.0"/>
+            <column name="loginenabled" valueNumeric="1"/>
+            <column name="verificacion"/>
+            <column name="mail" value="pruebas4@example.com"/>
+            <column name="nombre" value="4 de pruebas"/>
         </insert>
         <rollback>
             <delete tableName="usuarios">
-                <where>user = 'fenase'</where>
+                <where>user like 'test%'</where>
             </delete>
         </rollback>
     </changeSet>
     <changeSet author="fenase (generated)" id="TEST3" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
         <insert tableName="usuariosenproyecto">
-            <column name="idusuarios" valueComputed="(SELECT idusuarios FROM usuarios WHERE user = 'fenase')"/>
+            <column name="idusuarios" valueComputed="(SELECT idusuarios FROM usuarios WHERE user = 'test1')"/>
+            <column name="idproyectos" valueComputed="(SELECT idproyectos FROM proyectos WHERE nombre = 'Prueba basica')"/>
+            <column name="orden" valueNumeric="1"/>
+            <column name="confirmado" valueNumeric="0"/>
+        </insert>
+        <insert tableName="usuariosenproyecto">
+            <column name="idusuarios" valueComputed="(SELECT idusuarios FROM usuarios WHERE user = 'test2')"/>
             <column name="idproyectos" valueComputed="(SELECT idproyectos FROM proyectos WHERE nombre = 'Prueba basica')"/>
             <column name="orden" valueNumeric="1"/>
             <column name="confirmado" valueNumeric="0"/>

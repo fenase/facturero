@@ -1,91 +1,97 @@
-        <div>
-            <table>
-                <tr>
-                    <td>
-                        Id Proyecto
-                    </td>
-                    <td>
-                        {{ proyecto.id }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Nombre
-                    </td>
-                    <td>
-                        {{ proyecto.nombre }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Frecuencia
-                    </td>
-                    <td>
-                        {{ proyecto.frecuencia }} 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Cantidad de participantes
-                    </td>
-                    <td>
-                        {{ proyecto.cantidadParticipantes }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        comentarios
-                    </td>
-                    <td>
-                        {{ proyecto.comentarios }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        leyenda
-                    </td>
-                    <td>
-                        {{ proyecto.leyenda }}
-                    </td>
-                </tr>
-            </table>
-            <div class="participantes">
-                <h3> Participantes: </h3>
-                <div class="opcionAgregar">
-                    <select id="participantesDisponibles" name="participantesDisponibles">
-                        {% for usuario in usuariosDisponibles %}
-                            <option id="{{ usuario.id }}">
-                                {{ usuario.nombre }} ({{ usuario.user }})
-                            </option>
-                        {% endfor %}
-                    </select>
-                    <a href="javascript:proyectoAgregarParticipante()">
-                                <object class="iconIMG" data="template/icon/add.svg" type="image/svg+xml">
-                                    <img class="iconIMG" src="template/icon/add.png"/>
-                                </object>
-                    </a>
-                </div>
-                <div id="lista">
-                    {% for usuario in proyecto.participantes %}
-                        <div class="elemento" draggable="true"><div class="id" style="display: none;">{{ usuario.id }}</div>
-                        <div name="nombre" >{{ usuario.nombre }}</div>
-                        <div class="iconosLista">
-                            <a href="javascript:proyectoEliminarParticipante({{ usuario.id }})">
-                                <object class="iconIMG" data="template/icon/delete.svg" type="image/svg+xml">
-                                    <img class="iconIMG" src="template/icon/delete.png"/>
-                                </object>
-                            </a>
-                        </div>
+<div>
+    <table>
+        <tr>
+            <td>
+                Id Proyecto
+            </td>
+            <td>
+                {{ proyecto.id }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Nombre
+            </td>
+            <td>
+                {{ proyecto.nombre }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Frecuencia
+            </td>
+            <td>
+                {{ proyecto.frecuencia }} 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Cantidad de participantes
+            </td>
+            <td>
+                {{ proyecto.cantidadParticipantes }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                comentarios
+            </td>
+            <td>
+                {{ proyecto.comentarios }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                leyenda
+            </td>
+            <td>
+                {{ proyecto.leyenda }}
+            </td>
+        </tr>
+    </table>
+    <div class="participantes">
+        <div id="lista" class="lista">
+            <h3> Participantes: </h3>
+            <div class="la">
+            {% for usuario in proyecto.participantes %}
+                <div class="elemento" draggable="true"><div class="id" style="display: none;">{{ usuario.id }}</div>
+                    <div name="nombre" >{{ usuario.nombre }}</div>
+                    <div class="iconosLista">
+                        <a href="javascript:proyectoEliminarParticipante({{ usuario.id }})">
+                            <!--<object class="iconIMG" data="template/icon/delete.svg" type="image/svg+xml">
+                                <img class="iconIMG" src="template/icon/delete.png"/>
+                            </object>-->
+                        </a>
                     </div>
-                    {% endfor %}
-                    <!-- zona auxiliar -->
-                    <form id="form" method="post">
-                        <input name="listSortOrder" type="hidden" />
-                        <input name="accion" type="hidden" />
-                    </form>
-                    <!-- fin zona auxiliar -->
                 </div>
+            {% endfor %}
+            </div>
+            <!-- zona auxiliar -->
+            <form id="form" method="post">
+                <input name="listSortOrder" type="hidden" />
+                <input name="accion" type="hidden" />
+            </form>
+            <!-- fin zona auxiliar -->
+        </div>
+        <div class="opcionAgregar">
+            <h3> Usuarios disponibles: </h3>
+            <div class="lb" draggable="true">
+            {% for usuario in usuariosDisponibles %}
+                <div class="elemento" draggable="true"><div class="id" style="display: none;">{{ usuario.id }}</div>
+                    <div name="nombre" >{{ usuario.nombre }}</div>
+                    <div class="iconosLista">
+                        <a href="javascript:proyectoEliminarParticipante({{ usuario.id }})">
+                            <!--<object class="iconIMG" data="template/icon/delete.svg" type="image/svg+xml">
+                                <img class="iconIMG" src="template/icon/delete.png"/>
+                            </object>-->
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
             </div>
         </div>
+    </div>
+            
+            <div style="clear:both"><button onclick="guardarLista();">guardar</button></div>
+</div>
 
-        <button onclick="guardarLista();">guardar</button>
